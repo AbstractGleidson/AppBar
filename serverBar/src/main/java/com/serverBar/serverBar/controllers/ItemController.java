@@ -47,7 +47,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/Item/{num_item}")
-    public void deleteItem(@PathVariable int num_item) // Delete item for num_item
+    public void deleteItem(@PathVariable int num_item) // Delete item by num_item
     {
         DAO.deleteById(num_item);
     }

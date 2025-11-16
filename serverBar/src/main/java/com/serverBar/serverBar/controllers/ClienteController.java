@@ -17,6 +17,7 @@ public class ClienteController {
     @GetMapping("/clients")
     public ArrayList<Cliente> getClients() // Recover all database clients
     {
+        // Return List of Clients or Empty List
         return (ArrayList<Cliente>) DAO.findAll();
     }
 
