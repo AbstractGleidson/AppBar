@@ -13,4 +13,6 @@ public interface ConsumoInterface extends CrudRepository<Consumo, Integer> {
     // FROM Consumo consumo JOIN Conta conta ON Consumo.conta_id = conta.id
     // Finds all the consumptions of the account that has the id that was passed as parameter
     ArrayList<Consumo> findByContaId(int id);
+
+    ArrayList<Consumo> findByContaClienteName(String nome);
 }
