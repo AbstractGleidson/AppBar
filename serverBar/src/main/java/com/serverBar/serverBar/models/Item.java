@@ -11,46 +11,46 @@ public class Item {
 
     @Id // Defines this field as a primary key
     @Column(name = "num_item") // Relates this attribute to the database column
-    private int num_item;
+    private int number_item;
 
     @Column(name = "tipo", nullable = false) // Relates this attribute to the database column
-    private int tipo;
+    private int type;
 
     @Column(name = "valor", nullable = false) // Relates this attribute to the database column
-    private double valor;
+    private double value;
 
     @Column(name = "nome", length = 100, nullable = false) // Relate this attribute to the database column
-    private String nome;
+    private String name;
 
-    public double getValor() {
-        return valor;
+    public double getValue() {
+        return value;
     }
 
-    public int getNum_item() {
-        return num_item;
+    public int getNumber_item() {
+        return number_item;
     }
 
-    public int getTipo() {
-        return tipo;
+    public int getType() {
+        return type;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public void setNum_item(int num_item) {
-        this.num_item = num_item;
+    public void setNumber_item(int number_item) {
+        this.number_item = number_item;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
+    public void setValue(double value) {
+        this.value = value;
     }
 }

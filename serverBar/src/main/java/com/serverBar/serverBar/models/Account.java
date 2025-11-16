@@ -4,40 +4,40 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "conta") // Define a relationship between the account class and the account table
-public class Conta {
+public class Account {
 
     @Id // Defines this field as a primary key
     @Column(name = "id", nullable = false) // Relates this attribute to the database column
-    private int id;
+    private int id; // auto generated
 
     @OneToOne // Define a relationship one to one
     @JoinColumn(name = "cliente_cpf", nullable = false) // Relates this attribute to the database column
-    private Cliente cliente;
+    private Client client;
 
     @Column(name = "gorjeta", nullable = true) // Relates this attribute to the database column
-    private Double gorjeta;
+    private Double tip;
 
-    public Cliente getCliente() {
-        return cliente;
+    public Client getClient() {
+        return client;
     }
 
-    public Double getGorjeta() {
-        return gorjeta;
+    public Double getTip() {
+        return tip;
     }
 
-    public int getIdConta() {
+    public int getAccountId() {
         return id;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public void setGorjeta(Double gorjeta) {
-        this.gorjeta = gorjeta;
+    public void setTip(Double tip) {
+        this.tip = tip;
     }
 
-    public void setIdConta(int idConta) {
+    public void setAccountId(int idConta) {
         this.id = idConta;
     }
 }

@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "consumo") // Define a relationship between the consumption class and the consumption table
-public class Consumo {
+public class Consumption {
 
     @Id // define this field as a primary key
     @Column(name = "id") // Relates this attribute to the database column
-    private int id;
+    private int id; // auto generated
 
     @Column(name = "quantidade", nullable = false) // Relates this attribute to the database column
-    private int quantidade;
+    private int quantity;
 
     @OneToOne // Define a relationship one to one
     @JoinColumn(name = "num_item", nullable = false) // Relates this attribute to the database column
@@ -19,14 +19,14 @@ public class Consumo {
 
     @ManyToOne // Define a relationship many to one
     @JoinColumn(name = "conta_id", nullable = false) // Relates this attribute to the database column
-    private Conta conta;
+    private Account account;
 
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Account getAccount() {
+        return account;
     }
 
     public int getId() {
@@ -37,12 +37,12 @@ public class Consumo {
         return item;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public void setId(int id) {

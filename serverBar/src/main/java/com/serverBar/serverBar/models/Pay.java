@@ -6,64 +6,64 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pagamento")
-public class Pagamento {
+public class Pay {
 
     @Id
     @Column(name = "id")
-    private int id = 0; // Id is Auto Increment
+    private int id; // Id is Auto Increment
 
     @ManyToOne
     @JoinColumn(name = "conta_id", nullable = true)
-    private Conta conta;
+    private Account account;
 
     @Column(name = "valor", nullable = false)
-    private Double valor;
+    private Double value;
 
     @Column(name = "autor", length = 100, nullable = true)
-    private String autor;
+    private String author;
 
     // insertable = false, indicates that the field should not be filled, as it will be filled in the database
     // updatable = false, indicates that the field should not be update
     @Column(name = "data", nullable = false, insertable = false, updatable = false)
-    private LocalDateTime data;
+    private LocalDateTime date; // date is auto generate
 
-    public Conta getConta() {
-        return conta;
+    public Account getAccount() {
+        return account;
     }
 
     public int getId() {
         return id;
     }
 
-    public Double getValor() {
-        return valor;
+    public Double getValue() {
+        return value;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setValue(Double value) {
+        this.value = value;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

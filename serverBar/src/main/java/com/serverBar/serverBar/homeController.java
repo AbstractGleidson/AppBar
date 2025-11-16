@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class homeController {
 
     @GetMapping("/")
-    public String helloWorld()
+    public String getHome()
     {
         return "Application for managing a bar";
     }

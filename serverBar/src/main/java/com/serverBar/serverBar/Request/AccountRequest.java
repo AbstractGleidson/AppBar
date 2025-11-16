@@ -1,5 +1,6 @@
 package com.serverBar.serverBar.Request;
 
+// Body for request of post Account
 public class AccountRequest {
     private int cliente_cpf;
 

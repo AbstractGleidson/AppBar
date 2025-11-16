@@ -1,5 +1,6 @@
 package com.serverBar.serverBar.Request;
 
+// Body for request of post Pay
 public class PayRequest {
     private int conta_id;
     private Double valor;
