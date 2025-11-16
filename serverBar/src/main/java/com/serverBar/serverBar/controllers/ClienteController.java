@@ -26,9 +26,16 @@ public class ClienteController {
         return DAO.save(client); // Return new client
     }
 
+    @PutMapping("/client")
+    public Cliente updateClient(@RequestBody Cliente client) // Updates a customer information
+    {
+        return DAO.save(client); // Return update client
+    }
+
     @GetMapping("/client/{cpf}")
     public Optional<Cliente> searchClientCpf(@PathVariable("cpf") int cpf) // Search client by cpf
     {
+        // Client or Null
         return DAO.findById(cpf); // Return the client if it exists in the database
     }
 

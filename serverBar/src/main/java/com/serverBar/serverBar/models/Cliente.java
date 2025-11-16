@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cliente") // Defines a relationship between the client class and the client table
+@Table(name = "cliente") // Defines a relationship between the client class and the client table
 public class Cliente {
 
     @Id // Defines this field as a primary key
