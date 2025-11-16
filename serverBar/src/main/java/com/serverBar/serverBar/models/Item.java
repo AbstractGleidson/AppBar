@@ -10,8 +10,8 @@ import jakarta.persistence.Table;
 public class Item {
 
     @Id // Defines this field as a primary key
-    @Column(name = "numItem") // Relates this attribute to the database column
-    private int numItem;
+    @Column(name = "num_item") // Relates this attribute to the database column
+    private int num_item;
 
     @Column(name = "tipo", nullable = false) // Relates this attribute to the database column
     private int tipo;
@@ -26,8 +26,8 @@ public class Item {
         return valor;
     }
 
-    public int getNumItem() {
-        return numItem;
+    public int getNum_item() {
+        return num_item;
     }
 
     public int getTipo() {
@@ -46,8 +46,8 @@ public class Item {
         this.tipo = tipo;
     }
 
-    public void setNumItem(int numItem) {
-        this.numItem = numItem;
+    public void setNum_item(int num_item) {
+        this.num_item = num_item;
     }
 
     public void setValor(double valor) {

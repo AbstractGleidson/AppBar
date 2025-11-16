@@ -7,11 +7,11 @@ import jakarta.persistence.*;
 public class Conta {
 
     @Id // Defines this field as a primary key
-    @Column(name = "idConta", nullable = false) // Relates this attribute to the database column
-    private int idConta;
+    @Column(name = "id", nullable = false) // Relates this attribute to the database column
+    private int id;
 
     @OneToOne // Define a relationship one to one
-    @JoinColumn(name = "Cliente_CPF", nullable = false) // Relates this attribute to the database column
+    @JoinColumn(name = "cliente_cpf", nullable = false) // Relates this attribute to the database column
     private Cliente cliente;
 
     @Column(name = "gorjeta", nullable = true) // Relates this attribute to the database column
@@ -26,6 +26,18 @@ public class Conta {
     }
 
     public int getIdConta() {
-        return idConta;
+        return id;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setGorjeta(Double gorjeta) {
+        this.gorjeta = gorjeta;
+    }
+
+    public void setIdConta(int idConta) {
+        this.id = idConta;
     }
 }

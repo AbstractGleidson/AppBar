@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 public class Cliente {
 
     @Id // Defines this field as a primary key
-    @Column(name = "CPF") // Relates this attribute to the database column
+    @Column(name = "cpf") // Relates this attribute to the database column
     private int cpf;
 
     @Column(name = "nome", length = 100, nullable = false) // Relates this attribute to the database column
