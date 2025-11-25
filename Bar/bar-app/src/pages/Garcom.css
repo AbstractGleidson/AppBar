@@ -1,0 +1,46 @@
+/* Garantir que a página ocupe 100% da tela */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.Garcom-page {
+  background-color: #2563eb; /* azul */
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card branco */
+.Garcom-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 500px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.Garcom-page .Garcom-card .role-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Garcom-page .Garcom-card .role-buttons .botao,
+.Garcom-page .Garcom-card .role-buttons .botaoAtivo {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #1f1f1f;
+  color: white;
+  cursor: pointer;
+}

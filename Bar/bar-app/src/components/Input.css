@@ -1,0 +1,46 @@
+/* src/components/Button.css */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms;
+}
+
+/* Variantes */
+.btn-primary {
+  background: #2563eb; /* azul */
+  color: white;
+  box-shadow: 0 4px 10px rgba(37,99,235,0.15);
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+.btn-secondary {
+  background: #e5e7eb; /* cinza claro */
+  color: #111827;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+}
+.btn-secondary:hover { transform: translateY(-2px); }
+
+/* Disabled */
+.btn-disabled,
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Pequeno helper para ícones dentro do botão */
+.btn .icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}

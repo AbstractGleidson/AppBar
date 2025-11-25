@@ -1,0 +1,36 @@
+/* Garantir que a página ocupe 100% da tela */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.AMesa-page {
+  background-color: #2563eb; /* azul */
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card branco */
+.AMesa-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 350px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.AMesa-page .input {
+  width: 95%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  justify-content: center;
+}
