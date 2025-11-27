@@ -5,12 +5,15 @@ import com.serverBar.serverBar.DAOs.PayInterface;
 import com.serverBar.serverBar.Request.PayRequest.PayPostRequest;
 import com.serverBar.serverBar.Request.PayRequest.PayPutRequest;
 import com.serverBar.serverBar.Request.PayRequest.PayRevenueRequest;
+import com.serverBar.serverBar.Services.PaymentFullAccountService;
+import com.serverBar.serverBar.Services.PaymentService;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Pay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +27,8 @@ public class PayController {
     private PayInterface payDAO;
     @Autowired
     private AccountInterface accountDAO;
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping("/payments") // Recover all database payments
     public ArrayList<Pay> getPayments()
@@ -54,8 +59,10 @@ public class PayController {
     }
 
     @PostMapping("/pay") // Save one new pay on database
-    public ResponseEntity<?> postPay(@RequestBody PayPostRequest payRequest)
-    {
+    public ResponseEntity<?> postPay(@RequestBody PayPostRequest payRequest) throws IOException {
+        if(paymentService.validatedPayment(payRequest.getConta_id(), payRequest.getValor()))
+            return ResponseEntity.status(500).body("Não foi possivel realizar o pagamento, pois o valor é maior que a conta.");
+
         // Check if account exists
         Optional<Account> account  = accountDAO.findById(payRequest.getConta_id());
 
@@ -78,8 +85,7 @@ public class PayController {
     }
 
     @PutMapping("/pay")
-    public ResponseEntity<?> updatePay(@RequestBody PayPutRequest request)
-    {
+    public ResponseEntity<?> updatePay(@RequestBody PayPutRequest request) throws IOException {
         Pay pay = payDAO.findById(request.getPay_id()).orElse(null);
 
         if (pay == null)
@@ -99,8 +105,20 @@ public class PayController {
         if(request.getAutor() != null)
             pay.setAuthor(request.getAutor());
 
-        if(request.getValor() != null)
-            pay.setValue(request.getValor());
+        if(request.getValor() != null) {
+            if (request.getValor() > pay.getValue()) {
+                if (paymentService.validatedPayment(
+                        request.getConta_id() == null ? pay.getAccount().getAccountId() : request.getConta_id(),
+                        request.getValor() - pay.getValue()
+                    )
+                )
+                    pay.setValue(request.getValor());
+            }
+            else
+                pay.setValue(request.getValor());
+        }
+
+
 
         // Save pay and return server response
         return ResponseEntity.ok().body(payDAO.save(pay));

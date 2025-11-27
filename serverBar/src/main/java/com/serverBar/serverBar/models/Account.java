@@ -10,7 +10,7 @@ public class Account {
     @Column(name = "id", nullable = false) // Relates this attribute to the database column
     private int id; // auto generated
 
-    @OneToOne // Define a relationship one to one
+    @ManyToOne // Define a relationship many to one
     @JoinColumn(name = "cliente_cpf", nullable = false) // Relates this attribute to the database column
     private Client client;
 

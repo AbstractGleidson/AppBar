@@ -5,8 +5,10 @@ import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPostRequest;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPutRequest;
-import com.serverBar.serverBar.Services.AccountCalculationValue;
+import com.serverBar.serverBar.Services.AccountCalculationConsumptionsService;
+import com.serverBar.serverBar.Services.AccountCalculationValueService;
 import com.serverBar.serverBar.Services.TipCalculationService;
+import com.serverBar.serverBar.Services.ValidatedAccountService;
 import com.serverBar.serverBar.models.Client;
 import com.serverBar.serverBar.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,15 @@ public class AccountController {
     @Autowired
     private ClientInterface clientDAO;
     @Autowired
-    private AccountCalculationValue accountCalculationValue;
+    private AccountCalculationConsumptionsService accountCalculationConsumptionsService;
     @Autowired
     private TipCalculationService tipCalculationService;
     @Autowired
     private ConsumptionInterface consumptionDAO;
+    @Autowired
+    private ValidatedAccountService validatedAccountService;
+    @Autowired
+    private AccountCalculationValueService accountCalculationValueService;
 
     @GetMapping("/accounts")
     public ArrayList<Account> getAccounts() // Recover all database accounts
@@ -48,6 +54,9 @@ public class AccountController {
     @PostMapping("/account")
     public ResponseEntity<?> postAccount(@RequestBody AccountPostRequest accountRequest) // Save one new account
     {
+        if(!validatedAccountService.validateOpenAccount(accountRequest.getCliente_cpf()))
+            return ResponseEntity.status(500).body("O cliente já tem uma conta aberta!");
+
         // Check if client exists
         Optional<Client> client = clientDAO.findById(accountRequest.getCliente_cpf());
 
@@ -118,6 +127,13 @@ public class AccountController {
 
     @GetMapping("/account/value/{id}")
     public ResponseEntity<?> getAccountValue(@PathVariable int id) throws IOException {
-        return ResponseEntity.ok().body(accountCalculationValue.accountCalculation(consumptionDAO.findByAccountId(id)));
+        return ResponseEntity.ok().body(accountCalculationValueService.accountCalculation(id));
     }
+
+    @GetMapping("/accounts/{cpf}")
+    public ArrayList<Account> getClientAccounts(@PathVariable int cpf)
+    {
+        return accountDAO.findByClientCpf(cpf);
+    }
+
 }
