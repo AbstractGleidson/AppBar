@@ -1,9 +1,9 @@
-import "./Garcom.css";
+import "../Estilo/Garcom.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
+import Button from "../../components/Button"
 
 export default function Garcom() {
   const [role, setRole] = useState("");
@@ -16,7 +16,7 @@ export default function Garcom() {
         
           <Button 
             texto = "Abrir Cardápio"
-            onClick={() => setRole("aCardapio")}
+            onClick={() => navigate("/Garcom/Cardapio")}
           />
 
           <Button 

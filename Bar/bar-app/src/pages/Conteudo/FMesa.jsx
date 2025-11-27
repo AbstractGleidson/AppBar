@@ -1,17 +1,22 @@
-import "./FMesa.css";
+import "../Estilo/FMesa.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function FMesa() {
   const [mesa, setMesa] = useState("");
   const navigate = useNavigate();
 
   function fechamento() {
-    //Valida as informações
+
+    const dados = {
+      mesa: mesa
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
     alert("Mesa fechada com sucesso!")
     navigate(-1)
   }

@@ -1,10 +1,10 @@
-import "./Pedido.css";
+import "../Estilo/Pedido.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function Pedido() {
   const [role, setRole] = useState("");
@@ -20,7 +20,16 @@ export default function Pedido() {
       alert("Cancelamentos devem incluir motivos!")
       return
     } 
-    //Passa os valores pro Back
+
+    const dados = {
+      mesa: mesa,
+      id: id,
+      quant: quant,
+      motivo: motivo
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
+    
     alert("Atualização subida com sucesso!")
     navigate(-1)
   }

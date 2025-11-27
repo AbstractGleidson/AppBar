@@ -1,10 +1,10 @@
-import "./Login.css";
+import "../Estilo/Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function Login() {
   const [role, setRole] = useState("");

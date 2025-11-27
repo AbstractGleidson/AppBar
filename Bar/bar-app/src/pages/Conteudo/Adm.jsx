@@ -1,6 +1,6 @@
-import "./Adm.css";
+import "../Estilo/Adm.css";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button"
+import Button from "../../components/Button"
 
 export default function Adm() {
   const navigate = useNavigate();

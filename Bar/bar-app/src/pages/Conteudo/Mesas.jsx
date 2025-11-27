@@ -1,9 +1,9 @@
-import "./Mesas.css";
+import "../Estilo/Mesas.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
+import Button from "../../components/Button"
 
 export default function Mesas() {
   const [role, setRole] = useState("");

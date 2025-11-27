@@ -1,9 +1,9 @@
-import "./AoG.css";
+import "../Estilo/AoG.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
+import Button from "../../components/Button"
 
 export default function AoG() {
   const navigate = useNavigate();

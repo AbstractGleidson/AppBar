@@ -1,10 +1,10 @@
-import "./AMesa.css";
+import "../Estilo/AMesa.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function AMesa() {
   const [cpf, setCpf] = useState("");
@@ -12,7 +12,14 @@ export default function AMesa() {
   const navigate = useNavigate();
 
   function abertura() {
-    //Valida as informações
+
+    const dados = {
+      cpf: cpf,
+      quant: quant
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
+
     alert("Mesa aberta com sucesso!")
     navigate(-1)
   }

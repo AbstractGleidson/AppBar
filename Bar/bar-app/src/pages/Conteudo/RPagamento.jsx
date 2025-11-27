@@ -1,10 +1,10 @@
-import "./RPagamento.css";
+import "../Estilo/RPagamento.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function RPagamento() {
   const [mesa, setMesa] = useState("");
@@ -12,7 +12,14 @@ export default function RPagamento() {
   const navigate = useNavigate();
 
   function pagamento() {
-    //Valída as informações
+    
+    const dados = {
+      mesa: mesa,
+      valor: valor
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
+
     alert("Pagamento bem sucedido!")
     navigate(-1)
   }

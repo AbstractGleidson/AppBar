@@ -1,10 +1,10 @@
-import "./Negocio.css";
+import "../Estilo/Negocio.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function Negocio() {
   const [cou, setCou] = useState("");
@@ -14,7 +14,15 @@ export default function Negocio() {
 
   function atualizar() {
     //Checa a validade dos valores 
-    //Passa os valores pro Back
+    
+    const dados = {
+      cou : cou,
+      beb : beb,
+      com : com
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
+
     alert("Atualização subida com sucesso!")
     navigate(-1)
   }

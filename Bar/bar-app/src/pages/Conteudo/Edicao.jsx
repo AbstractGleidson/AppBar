@@ -1,10 +1,10 @@
-import "./Edicao.css";
+import "../Estilo/Edicao.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Componentes
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
 export default function Edicao() {
   const [id, setId] = useState("");
@@ -15,7 +15,16 @@ export default function Edicao() {
 
   function atualizar() {
     //Checa a validade dos valores 
-    //Passa os valores pro Back
+    
+    const dados = {
+      id: id,
+      valor: valor,
+      nome: nome,
+      tipo: tipo
+    }
+
+    JSON.stringify(dados, null, 2) //Passar pro DB
+
     alert("Atualização subida com sucesso!")
     navigate(-1)
   }
