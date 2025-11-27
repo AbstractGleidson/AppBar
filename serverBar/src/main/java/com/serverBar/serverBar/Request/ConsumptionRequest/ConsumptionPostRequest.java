@@ -1,7 +1,7 @@
-package com.serverBar.serverBar.Request;
+package com.serverBar.serverBar.Request.ConsumptionRequest;
 
 // Body for request of post Consumption
-public class ConsumptionRequest {
+public class ConsumptionPostRequest {
     private int quantidade;
     private int num_item;
     private int conta_id;
