@@ -1,8 +1,10 @@
 package com.serverBar.serverBar.Services;
 
+import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.Request.TipRequest;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Item;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,9 +13,13 @@ import java.util.ArrayList;
 @Service
 public class TipCalculationService {
 
-    public Double tipCalculation(ArrayList<Consumption> consumptions) throws IOException {
+    @Autowired
+    private ConsumptionInterface consumptionDAO;
+
+    public Double tipCalculation(int accountId) throws IOException {
         TipService tipService = new TipService();
         TipRequest tips = tipService.loadTipsPercents();
+        ArrayList<Consumption> consumptions = consumptionDAO.findByAccountId(accountId);
 
         double tip = 0.0;
 

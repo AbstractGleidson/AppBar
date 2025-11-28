@@ -122,7 +122,7 @@ public class AccountController {
 
     @GetMapping("/account/tip/{id}")
     public ResponseEntity<?> getTip(@PathVariable int id) throws IOException {
-        return ResponseEntity.ok().body(tipCalculationService.tipCalculation(consumptionDAO.findByAccountId(id)));
+        return ResponseEntity.ok().body(tipCalculationService.tipCalculation(id));
     }
 
     @GetMapping("/account/value/{id}")
