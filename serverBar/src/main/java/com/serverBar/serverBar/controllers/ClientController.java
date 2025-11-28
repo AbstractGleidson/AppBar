@@ -41,9 +41,9 @@ public class ClientController {
     }
 
     @PostMapping("/client")
-    public Client postClient(@RequestBody Client client) // Save one new client
+    public ResponseEntity<?> postClient(@RequestBody Client client) // Save one new client
     {
-        return clientDAO.save(client); // Return new client
+        return ResponseEntity.ok(clientDAO.save(client)); // Return new client
     }
 
     @PutMapping("/client")
@@ -53,10 +53,15 @@ public class ClientController {
     }
 
     @GetMapping("/client/{cpf}")
-    public Optional<Client> searchClientCpf(@PathVariable("cpf") int cpf) // Search client by cpf
+    public ResponseEntity<?> searchClientCpf(@PathVariable("cpf") int cpf) // Search client by cpf
     {
+        Client client = clientDAO.findById(cpf).orElse(null);
+
+        if(client == null)
+            return ResponseEntity.status(500).body("O cliente não existe");
+
         // Client or Null
-        return clientDAO.findById(cpf); // Return the client if it exists in the database
+        return ResponseEntity.ok(clientDAO.findById(cpf)); // Return the client if it exists in the database
     }
 
     @DeleteMapping("/clients")

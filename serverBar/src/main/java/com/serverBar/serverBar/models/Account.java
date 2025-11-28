@@ -20,6 +20,9 @@ public class Account {
     @Column(name = "aberta", nullable = false)
     private boolean isOpen;
 
+    @Column(name = "pessoas", nullable = false)
+    private int peoples;
+
     public Client getClient() {
         return client;
     }
@@ -54,6 +57,14 @@ public class Account {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPeoples() {
+        return peoples;
+    }
+
+    public void setPeoples(int peoples) {
+        this.peoples = peoples;
     }
 
     public void setOpen(boolean open) {

@@ -3,14 +3,16 @@ package com.serverBar.serverBar.controllers;
 import com.serverBar.serverBar.DAOs.ClientInterface;
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
+import com.serverBar.serverBar.DAOs.ItemInterface;
+import com.serverBar.serverBar.Request.AcccountRequest.AccountAllRequest;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPostRequest;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPutRequest;
-import com.serverBar.serverBar.Services.AccountCalculationConsumptionsService;
-import com.serverBar.serverBar.Services.AccountCalculationValueService;
-import com.serverBar.serverBar.Services.TipCalculationService;
-import com.serverBar.serverBar.Services.ValidatedAccountService;
+import com.serverBar.serverBar.Request.AcccountRequest.RequestOpenAccount;
+import com.serverBar.serverBar.Services.*;
 import com.serverBar.serverBar.models.Client;
 import com.serverBar.serverBar.models.Account;
+import com.serverBar.serverBar.models.Consumption;
+import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +38,32 @@ public class AccountController {
     private ValidatedAccountService validatedAccountService;
     @Autowired
     private AccountCalculationValueService accountCalculationValueService;
+    @Autowired
+    private ItemInterface itemDAO;
+    @Autowired
+    private OpenAccountService openAccountService;
 
     @GetMapping("/accounts")
-    public ArrayList<Account> getAccounts() // Recover all database accounts
+    public ResponseEntity<ArrayList<AccountAllRequest>>getAccounts() // Recover all database accounts
     {
         // Return List of accounts or Empty List
-        return (ArrayList<Account>) accountDAO.findAll();
+        ArrayList<Account> lista = (ArrayList<Account>) accountDAO.findAll();
+        ArrayList<AccountAllRequest> Response = new ArrayList<>();
+        for(Account account : lista) {
+            AccountAllRequest cara = new AccountAllRequest();
+            cara.setId(account.getId());
+            cara.setCpf(account.getClient().getCpf());
+            cara.setPessoas(account.getPeoples());
+            cara.setOpen(account.isOpen());
+
+            ArrayList<Consumption> consumos = consumptionDAO.findByAccountId(account.getId());
+            for(Consumption consumo : consumos) {
+                if(consumo.getItem().getNumber_item() == 0) cara.setCouvert(true);
+            }
+
+            Response.add(cara);
+        }
+        return ResponseEntity.ok(Response);
     }
 
     @GetMapping("/account/{id}")
@@ -72,6 +94,7 @@ public class AccountController {
         account.setAccountId(0); // id is auto generated
         account.setClient(newClient);
         account.setOpen(accountRequest.getOpen());
+        account.setPeoples(accountRequest.getPeoples());
         account.setTip(null);
 
         // Save account and return serve response
@@ -134,6 +157,40 @@ public class AccountController {
     public ArrayList<Account> getClientAccounts(@PathVariable int cpf)
     {
         return accountDAO.findByClientCpf(cpf);
+    }
+
+    @PostMapping("/account/open")
+    public ResponseEntity<?> openAccount(@RequestBody RequestOpenAccount request)
+    {
+        Client client = clientDAO.findById(request.getCpf_client()).orElse(null);
+
+        if(client == null)
+            return ResponseEntity.status(500).body("O cliente não existe no banco de dados!");
+
+        Account account = new Account();
+
+        account.setClient(client);
+        account.setOpen(true);
+        account.setAccountId(0);
+        account.setPeoples(request.getPeoples());
+
+        accountDAO.save(account);
+
+        Account newAccount = openAccountService.getAccountOpen(client.getCpf());
+        Item item = itemDAO.findById(0).orElse(null);
+
+        if(request.isCouvert()) {
+            Consumption couvert = new Consumption();
+
+            couvert.setAccount(newAccount);
+            couvert.setItem(item);
+            couvert.setQuantity(request.getPeoples());
+
+            consumptionDAO.save(couvert);
+        }
+
+
+        return ResponseEntity.ok(accountDAO.save(newAccount));
     }
 
 }
