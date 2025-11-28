@@ -15,6 +15,8 @@ import Edicao from "./pages/Conteudo/Edicao"
 import Negocio from "./pages/Conteudo/Negocio"
 import Cardapio from "./pages/Conteudo/Cardapio"
 import Cadastradas from "./pages/Conteudo/Cadastradas"
+import ItensVendidos from "./pages/Conteudo/ItensVendidos"
+import MaiorFaturamento from "./pages/Conteudo/MaiorFaturamento"
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
         <Route path="/Adm" element = {<Adm />} />
           <Route path="/Adm/Edicao" element = {<Edicao />} />
           <Route path="/Adm/Negocio" element = {<Negocio />} />
+          <Route path="/Adm/ItensVendidos" element = {<ItensVendidos/>} />
+          <Route path="/Adm/MaiorFaturamento" element = {<MaiorFaturamento/>} />
 
         <Route path="/Garcom" element = {<Garcom />} />
           <Route path="/Garcom/Cardapio" element = {<Cardapio />} />

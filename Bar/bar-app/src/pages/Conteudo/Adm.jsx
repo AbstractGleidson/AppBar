@@ -11,18 +11,28 @@ export default function Adm() {
         <div className="botoes">
 
           <Button 
-            texto = "Alterar regras do negócio"
-            onClick={() => navigate("/Adm/Negocio")}
-          /> 
-
-          <Button 
             texto = "Editar Cardápio"
             onClick={() => navigate("/Adm/Edicao")}
           />
 
           <Button 
-            texto = "Relatórios"
-            onClick={() => navigate("/Adm/Relatorios")}
+            texto = "Alterar regras do negócio"
+            onClick={() => navigate("/Adm/Negocio")}
+          /> 
+
+          <Button 
+            texto = "Faturamento por período"
+            onClick={() => navigate("/Adm/Faturamento")}
+          />
+
+          <Button 
+            texto = "Itens mais vendidos"
+            onClick={() => navigate("/Adm/ItensVendidos")}
+          />
+
+          <Button 
+            texto = "Itens com maior faturamento"
+            onClick={() => navigate("/Adm/MaiorFaturamento")}
           />        
   
         </div>

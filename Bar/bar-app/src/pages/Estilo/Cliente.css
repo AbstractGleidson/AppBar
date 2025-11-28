@@ -84,17 +84,12 @@ html, body {
 }
 
 
-
-
-
-
-/* Card branco */
-.lista-container {
+.Cliente-container {
   background: white;
   border-radius: 10px;
-  width: 1360px;
+  width: 100%;
 
-  height: 1000px; 
+  height: 80%; 
   max-height: 1000px;
   overflow-y: auto; 
 
@@ -104,46 +99,42 @@ html, body {
   align-items: top;
 }
 
-.lista-titulo {
+.Cliente-titulo {
   color: black;
-  justify-content: center;  /* Centraliza horizontalmente */
-  align-items: center;      /* Centraliza verticalmente */
+  justify-content: center;  
+  align-items: center;  
   font-weight: bold;
   text-align: center;
-}
-
-
-.total {
-  color: black;
-  text-align: left;
-  align-self: flex-end;  
 }
 
 .lista {
   color: black
 }
 
-.lista-item {
+.Cliente-item {
   display: flex;
   justify-content: space-between;
   
-
-  padding: 12px;
+  padding: 15px;
   margin-bottom: 8px;
 
   background: grey;
-  border-radius: 8px;
+  border-radius: 40px;
 
   transition: 0.2s;
 }
 
-.Mesa {
-  padding: 10px;
-  border-radius: 10px;
-  width: 150px;
-  background-color: black;
-
+.infos {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+  color: black;
+  box-sizing: border-box;
+}
+
+.infos h3 {
+  flex: 1;
+  text-align: center; 
 }
