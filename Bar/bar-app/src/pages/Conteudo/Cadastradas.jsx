@@ -1,18 +1,24 @@
 import "../Estilo/Cadastradas.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Cliente() {
   const navigate = useNavigate();
+  const [mesas, setMesas] = useState([]);
 
-  //Vai receber o Json
-  const mesas = [
-    { "id": 1, "cpf": "xxx.xxx.xxx-xx", "quantidade": "8", "couvert": "Habilitado",  "estado": "Aberta" },
-    { "id": 2, "cpf": "xxx.xxx.xxx-xx", "quantidade": "4", "couvert": "Desabilitado",  "estado": "Aberta" },
-    { "id": 3, "cpf": "xxx.xxx.xxx-xx", "quantidade": "5", "couvert": "Habilitado", "estado": "Fechada" }
-  ];
+  async function getMesas() {
+    const response = await fetch(`http://localhost:8080/accounts`);
+    const data = await response.json();
+    return data;
+  }
 
-  
+   useEffect(() => {
+      async function loadData() {
+        const data = await getMesas();
+        setMesas(data);
+      }
+      loadData();
+    }, []);
 
   return (
     <div className="Cadastradas-page">  
@@ -31,9 +37,9 @@ export default function Cliente() {
               <li className="lista-item">
                 <strong>{item.id}</strong>
                 <span className="cpf">{item.cpf}</span>
-                <span className="quantidade">{item.quantidade}</span>
-                <span className="couvert">{item.couvert}</span>
-                <span className="estado">{item.estado}</span>
+                <span className="quantidade">{item.pessoas}</span>
+                <span className="couvert">{item.couvert ? "Habilitado" : "Desabilitado"}</span>
+                <span className="estado">{item.open ? "Aberta" : "Fechada"}</span>
               </li>
             ))}
         </ul>

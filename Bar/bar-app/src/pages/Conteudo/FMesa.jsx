@@ -10,15 +10,33 @@ export default function FMesa() {
   const [mesa, setMesa] = useState("");
   const navigate = useNavigate();
 
-  function fechamento() {
+  async function fechamento() {
 
     const dados = {
-      mesa: mesa
+      client_cpf: null,
+      account_id: mesa,
+      open: false,
+      peoples: null
     }
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
-    alert("Mesa fechada com sucesso!")
-    navigate(-1)
+    const response = await fetch(
+      `http://localhost:8080/account`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(dados)
+    });
+
+    if(!response.ok)
+      alert("Mesa não existente!");
+    else{
+      const data = await response.json();
+
+      alert("Mesa fechada.");
+      navigate(-1);
+    }
   }
 
   return (

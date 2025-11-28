@@ -11,17 +11,33 @@ export default function RPessoa() {
   const [cpf, setCpf] = useState("");
   const navigate = useNavigate();
 
-  function cadastro() {
-
+  async function cadastro() {
+    
     const dados = {
-      nome : nome,
+      name : nome,
       cpf: cpf
     }
 
-    JSON.stringify(dados, null, 2)
+    const response = await fetch(`
+      http://localhost:8080/client`, 
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-    alert("Cadastro bem sucedido!")
-    navigate(-1)
+        body: JSON.stringify(dados)
+      }
+    ); //Tem que fazer um post de Nome e Cpf
+
+
+    if(!response.ok)
+      alert(response.text());
+    
+    else{
+      alert("Cadastro bem sucedido!");
+      navigate(-1);
+    }
   }
 
   return (

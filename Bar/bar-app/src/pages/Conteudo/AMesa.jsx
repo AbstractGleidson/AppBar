@@ -16,17 +16,35 @@ export default function AMesa() {
     setAtivo(prev => !prev);
   }
 
-  function abertura() {
+  async function abertura() {
 
     const dados = {
-      cpf: cpf,
-      quant: quant
+      cpf_client: cpf,
+      peoples: quant,
+      couvert: ativo
     }
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
+    const response = await fetch(`
+      http://localhost:8080/account/open`, 
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-    alert("Mesa aberta com sucesso!")
-    navigate(-1)
+        body: JSON.stringify(dados)
+      }
+    ); //Tem que fazer um post de Cpf, Quantidade de pessoas e Couvert
+
+
+    if(!response.ok)
+      alert(response.text());
+    
+    else{
+      alert("Cadastro bem sucedido!");
+      navigate(-1);
+    }
+
   }
 
   return (

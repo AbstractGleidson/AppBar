@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `BarSpring`.`Conta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `gorjeta` DOUBLE NULL,
   `aberta` TINYINT NOT NULL,
+  `pessoas` INT NOT NULL,
   `cliente_cpf` INT NOT NULL,
   UNIQUE INDEX `idMesa_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `fk_Conta_Cliente1_idx` (`cliente_cpf` ASC) VISIBLE,

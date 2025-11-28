@@ -11,19 +11,32 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
-  function entrar() {
+  async function entrar() {
     if(role !== "Admin" && role !== "Garcom" && role != "Cliente") {
       alert("Selecione uma função!");
       return
     }
+
     if (role === "Admin") {
       navigate("/AoG");
     } else if (role === "Garcom") {
       navigate("/Garcom");
     } else if (role === "Cliente") {
-      navigate("/Cliente");
+
+      const response = await fetch(`http://localhost:8080/client/${senha}`);
+
+      if(!response.ok)
+        alert("Usuário não cadastrado!");
+
+      else{
+        const data = await response.json();
+
+        alert(JSON.stringify(data));
+        navigate("/Cliente");
+      }
     }
   }
+
   return (
     <div className="login-page">
       <div className="login-card">
@@ -60,6 +73,7 @@ export default function Login() {
           onClick = {() => entrar()}
         />
       </div>
+      <p> {senha} </p>
     </div>
   );
 }
