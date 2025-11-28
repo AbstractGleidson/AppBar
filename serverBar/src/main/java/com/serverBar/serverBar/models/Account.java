@@ -10,12 +10,15 @@ public class Account {
     @Column(name = "id", nullable = false) // Relates this attribute to the database column
     private int id; // auto generated
 
-    @OneToOne // Define a relationship one to one
+    @ManyToOne // Define a relationship many to one
     @JoinColumn(name = "cliente_cpf", nullable = false) // Relates this attribute to the database column
     private Client client;
 
     @Column(name = "gorjeta", nullable = true) // Relates this attribute to the database column
     private Double tip;
+
+    @Column(name = "aberta", nullable = false)
+    private boolean isOpen;
 
     public Client getClient() {
         return client;
@@ -39,5 +42,22 @@ public class Account {
 
     public void setAccountId(int idConta) {
         this.id = idConta;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setOpen(boolean open) {
+        System.out.printf("Mesa aberta: %b", open);
+        this.isOpen = open;
     }
 }

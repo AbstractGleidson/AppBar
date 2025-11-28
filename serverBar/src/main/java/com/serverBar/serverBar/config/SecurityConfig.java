@@ -1,4 +1,4 @@
-package com.serverBar.serverBar;
+package com.serverBar.serverBar.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

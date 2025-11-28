@@ -3,7 +3,8 @@ package com.serverBar.serverBar.controllers;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ItemInterface;
-import com.serverBar.serverBar.Request.ConsumptionRequest;
+import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPostRequest;
+import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPutRequest;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Item;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -53,7 +55,7 @@ public class ConsumptionController {
     }
 
     @PostMapping("/consumption") // Save one new consumption
-    public ResponseEntity<?> postConsumption(@RequestBody ConsumptionRequest consumptionRequest)
+    public ResponseEntity<?> postConsumption(@RequestBody ConsumptionPostRequest consumptionRequest)
     {
         // Check if the account exists
         Optional<Account> account = accountDAO.findById(consumptionRequest.getConta_id());
@@ -81,38 +83,47 @@ public class ConsumptionController {
         return ResponseEntity.status(200).body(consumptionDAO.save(consumption));
     }
 
-    // ======================================================================
-    // You need to find this method, it is not updating the values just
-    // by creating a new account
-    // ======================================================================
-    @PutMapping("/consumption") // Updates a customer information
-    public ResponseEntity<?> updateConsumption(@RequestBody ConsumptionRequest consumptionRequest)
-    {
-        // Check if account exits
-        Optional<Account> account = accountDAO.findById(consumptionRequest.getConta_id());
-        // Check if item exits
-        Optional<Item>  item = itemDAO.findById(consumptionRequest.getNum_item());
+    @PutMapping("/consumption")
+    public ResponseEntity<?> updateConsumption(@RequestBody ConsumptionPutRequest request) {
 
-        // Account not exists
-        if(account.isEmpty())
-            return ResponseEntity.status(404).body("Conta não existe!");
+        // Buscar consumo
+        Consumption consumption = consumptionDAO.findById(request.getConsumption_id()).orElse(null);
 
-        // Item not exists
-        if(item.isEmpty())
-            return ResponseEntity.status(404).body("Item não existe!");
+        if (consumption == null) {
+            return ResponseEntity.status(404).body("Consumo não encontrado");
+        }
 
-        Account newAccount = account.get(); // get account
-        Item newItem = item.get(); // get item
+        // Atualizar conta (se enviada)
+        if (request.getConta_id() != null) {
+            Account account = accountDAO.findById(request.getConta_id()).orElse(null);
 
-        // Constructs consumption
-        Consumption consumption = new Consumption();
-        consumption.setId(0); // id is auto generated
-        consumption.setAccount(newAccount);
-        consumption.setItem(newItem);
-        consumption.setQuantity(consumptionRequest.getQuantidade());
+            if (account == null) {
+                return ResponseEntity.status(404).body("Conta não existe!");
+            }
 
-        // return new consumption and server response
-        return ResponseEntity.status(200).body(consumptionDAO.save(consumption));
+            consumption.setAccount(account);
+        }
+
+        // Atualizar item (se enviado)
+        if (request.getNum_item() != null) {
+            Item item = itemDAO.findById(request.getNum_item()).orElse(null);
+
+            if (item == null) {
+                return ResponseEntity.status(404).body("Item não existe!");
+            }
+
+            consumption.setItem(item);
+        }
+
+        // Atualizar quantidade (se enviada)
+        if (request.getQuantidade() != null) {
+            consumption.setQuantity(request.getQuantidade());
+        }
+
+        // Salvar mudanças diretamente
+        consumptionDAO.save(consumption);
+
+        return ResponseEntity.ok(consumption);
     }
 
     @DeleteMapping("/consumptions") // Delete all consumptions

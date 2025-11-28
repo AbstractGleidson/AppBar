@@ -1,7 +1,7 @@
-package com.serverBar.serverBar.Request;
+package com.serverBar.serverBar.Request.PayRequest;
 
 // Body for request of post Pay
-public class PayRequest {
+public class PayPostRequest {
     private int conta_id;
     private Double valor;
     private String autor;

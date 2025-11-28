@@ -22,6 +22,9 @@ public class Item {
     @Column(name = "nome", length = 100, nullable = false) // Relate this attribute to the database column
     private String name;
 
+    @Column(name = "disponivel", nullable = false)
+    private boolean isAvailable;
+
     public double getValue() {
         return value;
     }
@@ -52,5 +55,13 @@ public class Item {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public boolean isAvailable() {
+        return this.isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        this.isAvailable = available;
     }
 }

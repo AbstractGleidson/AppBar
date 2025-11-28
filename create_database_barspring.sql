@@ -19,7 +19,7 @@ USE `BarSpring` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BarSpring`.`Cliente` (
   `cpf` INT NOT NULL,
-  `nome` VARCHAR(100) NOT NULL,
+  `nome` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`cpf`),
   UNIQUE INDEX `CPF_UNIQUE` (`cpf` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -30,13 +30,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BarSpring`.`Conta` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `cliente_cpf` INT NOT NULL,
   `gorjeta` DOUBLE NULL,
-  PRIMARY KEY (`id`),
+  `aberta` TINYINT NOT NULL,
+  `cliente_cpf` INT NOT NULL,
   UNIQUE INDEX `idMesa_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_Conta_Cliente_idx` (`cliente_cpf` ASC) VISIBLE,
-  UNIQUE INDEX `Cliente_CPF_UNIQUE` (`cliente_cpf` ASC) VISIBLE,
-  CONSTRAINT `fk_Conta_Cliente`
+  INDEX `fk_Conta_Cliente1_idx` (`cliente_cpf` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_Conta_Cliente1`
     FOREIGN KEY (`cliente_cpf`)
     REFERENCES `BarSpring`.`Cliente` (`cpf`)
     ON DELETE NO ACTION
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `BarSpring`.`Pagamento` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `conta_id` INT NOT NULL,
   `valor` DOUBLE NOT NULL,
-  `autor` VARCHAR(100) NULL,
+  `autor` VARCHAR(200) NULL,
   `data` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `fk_Pagamento_Conta1_idx` (`conta_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS `BarSpring`.`Item` (
   `num_item` INT NOT NULL,
   `tipo` INT NOT NULL,
   `valor` DOUBLE NOT NULL,
-  `nome` VARCHAR(100) NOT NULL,
+  `nome` VARCHAR(200) NOT NULL,
+  `disponivel` TINYINT NOT NULL,
   PRIMARY KEY (`num_item`),
   UNIQUE INDEX `numItem_UNIQUE` (`num_item` ASC) VISIBLE)
 ENGINE = InnoDB;
