@@ -27,3 +27,11 @@ html, body {
 
   gap: 15px;
 }
+.Negocio-page .input {
+  width: 95%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  justify-content: center;
+  text-align: center;
+}

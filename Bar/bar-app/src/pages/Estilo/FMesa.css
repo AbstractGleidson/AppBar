@@ -33,4 +33,5 @@ html, body {
   border-radius: 8px;
   border: 1px solid #ccc;
   justify-content: center;
+  text-align: center;
 }

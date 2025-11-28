@@ -27,10 +27,21 @@ html, body {
   gap: 15px;
 }
 
+.couvert {
+  width: 150px;
+  padding: 10px;
+  align-self: center;
+}
+
+.botaoAtivo {
+  background-color: green;
+}
+
 .AMesa-page .input {
   width: 95%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
   justify-content: center;
+  text-align: center;
 }

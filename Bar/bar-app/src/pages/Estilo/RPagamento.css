@@ -34,3 +34,12 @@ html, body {
   border: 1px solid #ccc;
   justify-content: center;
 }
+
+.RPagamento-page .input {
+  width: 95%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  justify-content: center;
+  text-align: center;
+}

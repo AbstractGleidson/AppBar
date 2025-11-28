@@ -25,6 +25,11 @@ export default function Mesas() {
           />
 
           <Button 
+            texto = "Mesas cadastradas"
+            onClick={() => navigate("/Garcom/Mesas/Cadastradas")}
+          />
+
+          <Button 
             texto = "Gerenciar pedidos"
             onClick={() => navigate("/Garcom/Mesas/Pedido")}
           />
@@ -33,6 +38,7 @@ export default function Mesas() {
             texto = "Gerenciar pagamentos"
             onClick={() => navigate("/Garcom/Mesas/Pagamento")}
           />
+
         </div>
 
       </div>

@@ -14,6 +14,7 @@ import AoG from "./pages/Conteudo/AoG"
 import Edicao from "./pages/Conteudo/Edicao"
 import Negocio from "./pages/Conteudo/Negocio"
 import Cardapio from "./pages/Conteudo/Cardapio"
+import Cadastradas from "./pages/Conteudo/Cadastradas"
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/Garcom/Mesas/Pagamento" element = {<RPagamento />} />
             <Route path="/Garcom/Mesas/Abrir" element = {<AMesa />} />
             <Route path="/Garcom/Mesas/Fechar" element = {<FMesa />} />
+            <Route path="/Garcom/Mesas/Cadastradas" element = {<Cadastradas />} />
 
       </Routes>
     </BrowserRouter>
