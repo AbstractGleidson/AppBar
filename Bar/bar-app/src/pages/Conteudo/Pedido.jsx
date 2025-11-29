@@ -14,21 +14,7 @@ export default function Pedido() {
   const [motivo, setMotivo] = useState("");
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   async function registrar() {
-    //Checa a validade dos valores
-    if(role === "Cancelar" && motivo === "") {
-      alert("Cancelamentos devem incluir motivos!")
-      return
-    } 
-    else if(role === "Registrar"){
-      const dados = {
-        conta_id: mesa,
-        num_item: id,
-        quantidade: quant,
-      }
-=======
-  function registrar() {
     if(role.trim() == "") {
       alert("Selecione uma opção de registro.")
       return;
@@ -48,7 +34,13 @@ export default function Pedido() {
       alert("Os campos devem conter apenas números.")
       return;
     }
->>>>>>> main
+
+    if(role === "Registrar"){
+      const dados = {
+        conta_id: mesa,
+        num_item: id,
+        quantidade: quant,
+      }
 
       const response = await fetch(
         `http://localhost:8080/consumption`, 

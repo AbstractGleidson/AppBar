@@ -18,8 +18,6 @@ export default function RPessoa() {
       name : nome,
       cpf: cpf
     }
-
-    
   }
 
   return (

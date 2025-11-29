@@ -11,10 +11,7 @@ export default function RPagamento() {
   const [valor, setValor] = useState("");
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   async function pagamento() {
-=======
-  function pagamento() {
 
     
     if(mesa.trim() === "" || valor.trim() === "") {
@@ -28,7 +25,6 @@ export default function RPagamento() {
     }
 
 
->>>>>>> main
     
     const dados = {
       conta_id: mesa,

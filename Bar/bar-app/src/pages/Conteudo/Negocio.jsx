@@ -12,23 +12,7 @@ export default function Negocio() {
   const [com, setCom] = useState("");
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   async function atualizar() {
-
-    // Atualizar couvert
-    if (cou !== "") {
-      const responseCouvert = await fetch(
-        `http://localhost:8080/bar/covert/${cou}`,
-        { method: "PUT" }
-      );
-
-      if (!responseCouvert.ok) {
-        alert("Erro ao atualizar couvert!");
-      } else {
-        alert("Couvert atualizado!");
-      }
-=======
-  function atualizar() {
 
     if(cou.trim() !== "" && !(/^[0-9]+(,[0-9]{1,2})?$/.test(cou.trim())) ) {
       alert("Os campos devem possuir dados válidos.");
@@ -49,7 +33,6 @@ export default function Negocio() {
       cou : cou,
       beb : beb,
       com : com
->>>>>>> main
     }
 
     // Enviar gorjetas

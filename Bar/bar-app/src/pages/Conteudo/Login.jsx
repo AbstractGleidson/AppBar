@@ -22,16 +22,55 @@ export default function Login() {
       return;
     }
 
-    if(!(/^[0-9]+$/.test(senha.trim()))) {
-      alert("O campo deve conter apenas números.")
-      return;
-    }
-
     if (role === "Admin") {
-      navigate("/AoG");
+        const response = await fetch(
+            `http://localhost:8080/auth/login/admin`, 
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: senha
+            }
+        );
+
+        if(response.ok)
+        {
+          alert("Login realizado com suscesso");
+          navigate("/AoG");
+        }
+        else{
+          const msg = await response.text()
+          alert(msg)
+        }
     } else if (role === "Garcom") {
-      navigate("/Garcom");
+        const response = await fetch(
+            `http://localhost:8080/auth/login/garcom`, 
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: senha
+            }
+        );
+
+        if(response.ok)
+        {
+          alert("Login realizado com suscesso");
+          navigate("/Garcom");
+        }
+        else{
+          const msg = await response.text()
+          alert(msg)
+        }
     } else if (role === "Cliente") {
+      if(!(/^[0-9]+$/.test(senha.trim()))) {
+          alert("O campo deve conter apenas números.")
+          return;
+      }
 
       const response = await fetch(`http://localhost:8080/client/${senha}`);
 
@@ -41,7 +80,7 @@ export default function Login() {
       else{
         const data = await response.json();
 
-        alert(JSON.stringify(data));
+        alert("Login Realizado com sucesso");
         navigate(
           "/Cliente", 
           {state: {cpf: senha}
