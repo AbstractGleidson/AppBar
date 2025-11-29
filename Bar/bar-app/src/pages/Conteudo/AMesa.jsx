@@ -65,14 +65,14 @@ export default function AMesa() {
       <div className="AMesa-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Cpf"
           value = {cpf}
           onChange={(e) => setCpf(e.target.value)}
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Quantidade de pessoas"
           value = {quant}
           onChange={(e) => setQuant(e.target.value)}

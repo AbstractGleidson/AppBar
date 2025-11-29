@@ -61,7 +61,7 @@ export default function RPessoa() {
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Cpf"
           value = {cpf}
           onChange={(e) => setCpf(e.target.value)}

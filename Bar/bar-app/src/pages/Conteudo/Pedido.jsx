@@ -53,21 +53,21 @@ export default function Pedido() {
       <div className="Pedido-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Número da mesa"
           value = {mesa}
           onChange={(e) => setMesa(e.target.value)}
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Id do Item"
           value = {id}
           onChange={(e) => setId(e.target.value)}
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Quantidade"
           value = {quant}
           onChange={(e) => setQuant(e.target.value)}

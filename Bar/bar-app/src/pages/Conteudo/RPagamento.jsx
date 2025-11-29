@@ -42,7 +42,7 @@ export default function RPagamento() {
       <div className="RPagamento-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Id da Mesa"
           value = {mesa}
           onChange={(e) => setMesa(e.target.value)}

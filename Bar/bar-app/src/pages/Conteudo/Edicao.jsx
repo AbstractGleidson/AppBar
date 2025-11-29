@@ -20,12 +20,16 @@ export default function Edicao() {
       return;
     }
 
-    if(!(/^[0-9]+$/.test(id.trim())) || !(/^[0-9]+(,[0-9]{1,2})?$/.test(valor.trim())) || tipo.trim().toLowerCase() !== "comida" && tipo.trim().toLowerCase() !== "bebida") {
+    if(!(/^[0-9]+$/.test(id.trim())) || (valor.trim() !== "" && !(/^[0-9]+(,[0-9]{1,2})?$/.test(valor.trim()))) ) {
       alert("Os campos devem possuir dados válidos.");
       return;
     }
 
-    
+    if(tipo.trim() !== "" && (tipo.trim().toLowerCase() !== "comida" && tipo.trim().toLowerCase() !== "bebida") ) {
+      alert("O tipo deve ser Comida ou Bebida.");
+      return;
+    }
+
     const dados = {
       id: id,
       valor: valor,
@@ -44,7 +48,7 @@ export default function Edicao() {
       <div className="Edicao-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Id do Item"
           value = {id}
           onChange={(e) => setId(e.target.value)}
