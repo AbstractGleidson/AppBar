@@ -2,11 +2,11 @@ package com.serverBar.serverBar.Request.AcccountRequest;
 
 // Body for request of post Account
 public class AccountPostRequest {
-    private int cliente_cpf;
+    private String cliente_cpf;
     private boolean open;
     private int peoples;
 
-    public int getCliente_cpf() {
+    public String getCliente_cpf() {
         return cliente_cpf;
     }
 

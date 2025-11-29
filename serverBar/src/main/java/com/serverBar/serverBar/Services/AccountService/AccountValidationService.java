@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.AccountService;
 
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ClientInterface;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class ValidatedAccountService {
+public class AccountValidationService {
 
     @Autowired
     private AccountInterface accountDAO;
@@ -18,7 +18,7 @@ public class ValidatedAccountService {
     private ClientInterface clientDAO;
 
     // Verifica se o cliente ja tem alguma conta aberta
-    public boolean validateOpenAccount(int cpf)
+    public boolean validateOpenAccount(String cpf)
     {
         ArrayList<Account> accountsClient = accountDAO.findByClientCpf(cpf);
 

@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.PayService;
 
 import com.serverBar.serverBar.DAOs.PayInterface;
 import com.serverBar.serverBar.models.Pay;

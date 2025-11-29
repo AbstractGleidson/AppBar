@@ -22,13 +22,16 @@ public class ItemResumeService {
 
         for(Object[] t: top)
         {
-            ItemMoreSaleRequest item = new ItemMoreSaleRequest();
+            // Tira o ingresso da listagem
+            if(((int) t[0]) != 0) {
+                ItemMoreSaleRequest item = new ItemMoreSaleRequest();
 
-            item.setItem_id((Number) t[0]);
-            item.setName((String) t[1]);
-            item.setQuantity((Number) t[2]);
+                item.setItem_id((int) t[0]);
+                item.setName((String) t[1]);
+                item.setQuantity((int) t[2]);
 
-            report.add(item);
+                report.add(item);
+            }
         }
 
         return report;
@@ -36,21 +39,24 @@ public class ItemResumeService {
 
     public ArrayList<ItemMoreRevenueRequest> getItemRevenueReport() {
         // Chama o top 10 de faturamento
-        ArrayList<Object[]> result = itemDAO.findMoreRevenue(
+        ArrayList<Object[]> top = itemDAO.findMoreRevenue(
                 PageRequest.of(0, 10) // TOP 10
         );
 
         // Monta a resposta
         ArrayList<ItemMoreRevenueRequest> report = new ArrayList<>();
 
-        for (Object[] row : result) {
-            ItemMoreRevenueRequest request = new ItemMoreRevenueRequest();
+        for (Object[] t : top) {
 
-            request.setItem_id(((Number) row[0]).intValue());
-            request.setName((String) row[1]);
-            request.setRevenue(((Number) row[2]).doubleValue());
+            if(((int) t[0]) != 0){
+                ItemMoreRevenueRequest request = new ItemMoreRevenueRequest();
 
-            report.add(request);
+                request.setItem_id(((int) t[0]));
+                request.setName((String) t[1]);
+                request.setRevenue(((double) t[2]));
+
+                report.add(request);
+            }
         }
 
         return report;

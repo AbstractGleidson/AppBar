@@ -7,8 +7,15 @@ import com.serverBar.serverBar.DAOs.ItemInterface;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountAllRequest;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPostRequest;
 import com.serverBar.serverBar.Request.AcccountRequest.AccountPutRequest;
-import com.serverBar.serverBar.Request.AcccountRequest.RequestOpenAccount;
-import com.serverBar.serverBar.Services.*;
+import com.serverBar.serverBar.Request.AcccountRequest.AccountOpenRequest;
+import com.serverBar.serverBar.Request.TipRequest.TipRequest;
+import com.serverBar.serverBar.Request.TipRequest.TipValuesRequest;
+import com.serverBar.serverBar.Services.AccountService.AccountCalculationConsumptionsService;
+import com.serverBar.serverBar.Services.AccountService.AccountCalculationValueService;
+import com.serverBar.serverBar.Services.AccountService.AccountOpenService;
+import com.serverBar.serverBar.Services.AccountService.AccountValidationService;
+import com.serverBar.serverBar.Services.TipService.TipCalculationService;
+import com.serverBar.serverBar.Services.TipService.TipManagerService;
 import com.serverBar.serverBar.models.Client;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Consumption;
@@ -18,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -35,13 +43,15 @@ public class AccountController {
     @Autowired
     private ConsumptionInterface consumptionDAO;
     @Autowired
-    private ValidatedAccountService validatedAccountService;
+    private AccountValidationService validatedAccountService;
     @Autowired
     private AccountCalculationValueService accountCalculationValueService;
     @Autowired
     private ItemInterface itemDAO;
     @Autowired
-    private OpenAccountService openAccountService;
+    private AccountOpenService openAccountService;
+    @Autowired
+    private TipManagerService tipManagerService;
 
     @GetMapping("/accounts")
     public ResponseEntity<ArrayList<AccountAllRequest>>getAccounts() // Recover all database accounts
@@ -92,7 +102,6 @@ public class AccountController {
         account.setClient(newClient);
         account.setOpen(accountRequest.getOpen());
         account.setPeoples(accountRequest.getPeoples());
-        account.setTip(null);
 
         // Save account and return serve response
         return ResponseEntity.ok().body(accountDAO.save(account));
@@ -151,43 +160,116 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{cpf}")
-    public ArrayList<Account> getClientAccounts(@PathVariable int cpf)
+    public ArrayList<Account> getClientAccounts(@PathVariable String cpf)
     {
         return accountDAO.findByClientCpf(cpf);
     }
 
     @PostMapping("/account/open")
-    public ResponseEntity<?> openAccount(@RequestBody RequestOpenAccount request)
+    public ResponseEntity<?> openAccount(@RequestBody AccountOpenRequest request)
     {
-        Client client = clientDAO.findById(request.getCpf_client()).orElse(null);
+        try {
+            Client client = clientDAO.findById(request.getCpf_client()).orElse(null);
 
-        if(client == null)
-            return ResponseEntity.status(500).body("O cliente não existe no banco de dados!");
+            if (client == null)
+                return ResponseEntity.status(500).body("O cliente não existe no banco de dados!");
 
-        Account account = new Account();
+            Account account = new Account();
 
-        account.setClient(client);
-        account.setOpen(true);
-        account.setAccountId(0);
-        account.setPeoples(request.getPeoples());
+            account.setClient(client);
+            account.setOpen(true);
+            account.setAccountId(0);
+            account.setPeoples(request.getPeoples());
 
-        accountDAO.save(account);
+            accountDAO.save(account);
 
-        Account newAccount = openAccountService.getAccountOpen(client.getCpf());
-        Item item = itemDAO.findById(0).orElse(null);
+            Account newAccount = openAccountService.getAccountOpen(client.getCpf());
+            Item item = itemDAO.findById(0).orElse(null);
 
-        if(request.isCouvert()) {
-            Consumption couvert = new Consumption();
+            if (item == null) {
+                // Cadastra ingresso se ele ainda nãi tiver sido cadastrado
+                item = new Item();
+                item.setName("Ingresso");
+                item.setNumber_item(0);
+                item.setAvailable(true);
+                item.setType(1);
+                item.setValue(0);
 
-            couvert.setAccount(newAccount);
-            couvert.setItem(item);
-            couvert.setQuantity(request.getPeoples());
+                itemDAO.save(item);
+            }
 
-            consumptionDAO.save(couvert);
+            if (request.isCouvert()) {
+                Consumption couvert = new Consumption();
+
+                couvert.setAccount(newAccount);
+                couvert.setItem(item);
+                couvert.setQuantity(request.getPeoples());
+
+                consumptionDAO.save(couvert);
+            }
+
+            return ResponseEntity.ok(accountDAO.save(newAccount));
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
+    }
+
+
+    @PutMapping("/account/close/{accountId}")
+    public ResponseEntity<?> accountClose(@PathVariable int accountId) throws IOException {
+
+        try {
+            Account account = accountDAO.findById(accountId).orElse(null);
+            Double value = accountCalculationValueService.accountCalculation(accountId);
+            TipValuesRequest tips = tipCalculationService.tipCalculation(accountId);
+
+            if (account == null) {
+                return ResponseEntity.status(404).body("Conta não existe!");
+            }
+
+            // Fecha a conta e adciona informacoes fondamentais
+            account.setOpen(false);
+            account.setDate_close(LocalDateTime.now());
+            account.setValue(value);
+            account.setTipDrink(tips.getTipDrinkValue());
+            account.setTipFood(tips.getTipFoodValue());
+
+            // Salvar atualizações
+            accountDAO.save(account);
+
+            return ResponseEntity.ok(account);
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Erro:" + e);
         }
 
+    }
 
-        return ResponseEntity.ok(accountDAO.save(newAccount));
+    @PostMapping("/account/values/update")
+    public ResponseEntity<?> accountValueUpdate(@PathVariable int accountId) throws IOException
+    {
+        try{
+            Account account = accountDAO.findById(accountId).orElse(null);
+
+            if(account == null)
+                return ResponseEntity.status(404).body("Essa conta não existe!");
+
+            if(account.isOpen())
+                return ResponseEntity.status(404).body("Conta ainda está aberta!");
+
+            double value = accountCalculationValueService.accountCalculation(accountId);
+            TipValuesRequest tips = tipCalculationService.tipCalculation(accountId);
+
+            account.setValue(value);
+            account.setTipFood(tips.getTipFoodValue());
+            account.setTipDrink(tips.getTipFoodValue());
+
+            accountDAO.save(account);
+
+            return ResponseEntity.ok(account);
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
 }

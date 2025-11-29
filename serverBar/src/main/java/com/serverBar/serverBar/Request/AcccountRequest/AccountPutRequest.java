@@ -1,12 +1,12 @@
 package com.serverBar.serverBar.Request.AcccountRequest;
 
 public class AccountPutRequest {
-    private Integer cliente_cpf;
+    private String cliente_cpf;
     private int account_id;
     private Boolean open;
     private int peoples;
 
-    public Integer getCliente_cpf() {
+    public String getCliente_cpf() {
         return cliente_cpf;
     }
 

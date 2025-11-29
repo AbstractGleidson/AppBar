@@ -1,7 +1,8 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.AccountService;
 
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.Request.TipRequest.TipRequest;
+import com.serverBar.serverBar.Services.TipService.TipManagerService;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class AccountCalculationConsumptionsService {
     private ConsumptionInterface consumptionDAO;
 
     public Double accountCalculationConsumptions(int accountId) throws IOException {
-        TipService tipService = new TipService();
+        TipManagerService tipService = new TipManagerService();
         TipRequest tips = tipService.loadTipsPercents();
         ArrayList<Consumption> consumptions = consumptionDAO.findByAccountId(accountId);
 

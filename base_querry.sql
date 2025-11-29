@@ -24,7 +24,7 @@ SELECT * FROM item;
 
 -- Criando algumas contas
 
-INSERT INTO conta (cliente_cpf) VALUES (1), (2), (3), (4);
+INSERT INTO conta (cliente_cpf, aberta, pessoas) VALUES (1, 1, 5), (2, 1, 4), (3, 1, 2), (4, 1, 10);
 SELECT * FROM conta;
 
 -- Seleciona as contas e clientes

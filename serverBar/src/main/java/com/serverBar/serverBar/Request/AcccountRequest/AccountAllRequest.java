@@ -2,7 +2,7 @@ package com.serverBar.serverBar.Request.AcccountRequest;
 
 public class AccountAllRequest {
     private int id;
-    private int cpf;
+    private String cpf;
     private int pessoas;
     private boolean couvert;
     private boolean open;
@@ -11,7 +11,7 @@ public class AccountAllRequest {
         return id;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
@@ -39,7 +39,7 @@ public class AccountAllRequest {
         this.id = id;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 

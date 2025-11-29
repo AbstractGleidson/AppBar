@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.TipService;
 
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.Request.TipRequest.TipRequest;
@@ -18,7 +18,7 @@ public class TipCalculationService {
     private ConsumptionInterface consumptionDAO;
 
     public TipValuesRequest tipCalculation(int accountId) throws IOException {
-        TipService tipService = new TipService();
+        TipManagerService tipService = new TipManagerService();
         TipRequest tips = tipService.loadTipsPercents();
         ArrayList<Consumption> consumptions = consumptionDAO.findByAccountId(accountId);
         TipValuesRequest tipValuesRequest = new TipValuesRequest();

@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.AccountService;
 
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.models.Account;
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class OpenAccountService {
+public class AccountOpenService {
 
     @Autowired
     private AccountInterface accountDAO;
 
     // Acha a primeira conta aberta do cliente
-    public Account getAccountOpen(int cpf)
+    public Account getAccountOpen(String cpf)
     {
         ArrayList<Account> accounts = accountDAO.findByClientCpf(cpf);
 

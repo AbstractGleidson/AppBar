@@ -18,7 +18,7 @@ USE `BarSpring` ;
 -- Table `BarSpring`.`Cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BarSpring`.`Cliente` (
-  `cpf` INT NOT NULL,
+  `cpf` VARCHAR(20) NOT NULL,
   `nome` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`cpf`),
   UNIQUE INDEX `CPF_UNIQUE` (`cpf` ASC) VISIBLE)
@@ -30,10 +30,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `BarSpring`.`Conta` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `gorjeta` DOUBLE NULL,
   `aberta` TINYINT NOT NULL,
+  `cliente_cpf` VARCHAR(20) NOT NULL,
   `pessoas` INT NOT NULL,
-  `cliente_cpf` INT NOT NULL,
+  `data_fecha` DATETIME NULL,
+  `gor_bebida` DOUBLE NULL,
+  `gor_comida` DOUBLE NULL,
+  `conta_value` DOUBLE NULL,
   UNIQUE INDEX `idMesa_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `fk_Conta_Cliente1_idx` (`cliente_cpf` ASC) VISIBLE,
   PRIMARY KEY (`id`),

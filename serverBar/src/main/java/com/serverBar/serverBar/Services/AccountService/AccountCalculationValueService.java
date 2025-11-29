@@ -1,7 +1,8 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.AccountService;
 
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
+import com.serverBar.serverBar.Services.PayService.PaymentFullAccountService;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Consumption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Service
-public class PaymentService {
-
+public class AccountCalculationValueService {
     @Autowired
     private AccountInterface accountDAO;
     @Autowired
@@ -22,16 +22,14 @@ public class PaymentService {
     @Autowired
     PaymentFullAccountService paymentFullAccountService;
 
-    public boolean validatedPayment(int accountId, double payValue) throws IOException {
-        Account account = accountDAO.findById(accountId).orElse(null);
 
-        if (account == null)
-            return false;
+    public Double accountCalculation(int accountId) throws IOException {
+        Account account = accountDAO.findById(accountId).orElse(null);
 
         ArrayList<Consumption> accountConsumptions = consumptionDAO.findByAccountId(accountId);
         double valueAccount =  accountCalculationValueService.accountCalculationConsumptions(accountId);
         double payAccount = paymentFullAccountService.paymentFullAccountServe(accountId);
 
-        return (payAccount + payValue > valueAccount);
+        return valueAccount - payAccount;
     }
 }

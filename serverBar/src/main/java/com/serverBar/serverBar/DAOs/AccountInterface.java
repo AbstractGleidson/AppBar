@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public interface AccountInterface extends CrudRepository<Account, Integer> {
 
     // Find consumptions by client name
-    ArrayList<Account> findByClientCpf(int cpf);
+    ArrayList<Account> findByClientCpf(String cpf);
 }

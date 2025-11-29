@@ -1,7 +1,7 @@
 package com.serverBar.serverBar.Request.AcccountRequest;
 
-public class RequestOpenAccount {
-    private int cpf_client;
+public class AccountOpenRequest {
+    private String cpf_client;
     private int peoples;
     private boolean couvert;
 
@@ -9,7 +9,7 @@ public class RequestOpenAccount {
         return peoples;
     }
 
-    public int getCpf_client() {
+    public String getCpf_client() {
         return cpf_client;
     }
 
@@ -25,7 +25,7 @@ public class RequestOpenAccount {
         this.couvert = couvert;
     }
 
-    public void setCpf_client(int cpf_client) {
+    public void setCpf_client(String cpf_client) {
         this.cpf_client = cpf_client;
     }
 }

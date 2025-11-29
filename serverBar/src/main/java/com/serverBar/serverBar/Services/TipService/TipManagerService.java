@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.TipService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.serverBar.serverBar.Request.TipRequest.TipRequest;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Service
-public class TipService {
+public class TipManagerService {
 
     private static final String FILE_PATH = "config/tipConfig.json";
     private final ObjectMapper mapper = new ObjectMapper();

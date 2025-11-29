@@ -5,10 +5,11 @@ import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.DAOs.ItemInterface;
 import com.serverBar.serverBar.Request.ClientRequest.ClientResumeRequest;
 import com.serverBar.serverBar.Request.TipRequest.TipValuesRequest;
-import com.serverBar.serverBar.Services.AccountCalculationConsumptionsService;
-import com.serverBar.serverBar.Services.AccountCalculationValueService;
-import com.serverBar.serverBar.Services.OpenAccountService;
-import com.serverBar.serverBar.Services.TipCalculationService;
+import com.serverBar.serverBar.Services.AccountService.AccountCalculationConsumptionsService;
+import com.serverBar.serverBar.Services.AccountService.AccountCalculationValueService;
+import com.serverBar.serverBar.Services.AccountService.AccountLastClosedService;
+import com.serverBar.serverBar.Services.AccountService.AccountOpenService;
+import com.serverBar.serverBar.Services.TipService.TipCalculationService;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Client;
 import com.serverBar.serverBar.models.Item;
@@ -35,7 +36,9 @@ public class ClientController {
     @Autowired
     private ItemInterface itemDAO;
     @Autowired
-    private OpenAccountService openAccountService;
+    private AccountOpenService openAccountService;
+    @Autowired
+    private AccountLastClosedService accountLastClosedService;
 
     @GetMapping("/clients")
     public ArrayList<Client> getClients() // Recover all database clients
@@ -57,7 +60,7 @@ public class ClientController {
     }
 
     @GetMapping("/client/{cpf}")
-    public ResponseEntity<?> searchClientCpf(@PathVariable("cpf") int cpf) // Search client by cpf
+    public ResponseEntity<?> searchClientCpf(@PathVariable("cpf") String cpf) // Search client by cpf
     {
         Client client = clientDAO.findById(cpf).orElse(null);
 
@@ -75,18 +78,26 @@ public class ClientController {
     }
 
     @DeleteMapping("/client/{cpf}")
-    public void deleteClient(@PathVariable("cpf") int cpf) // Delete client for cpf
+    public void deleteClient(@PathVariable("cpf") String cpf) // Delete client for cpf
     {
         clientDAO.deleteById(cpf);
     }
 
     // Faz um resumo da conta de um cliente
     @GetMapping("/client/resume/{cpf}")
-    public ResponseEntity<?> getResume(@PathVariable int cpf) throws IOException {
+    public ResponseEntity<?> getResume(@PathVariable String cpf) throws IOException {
 
+        // tenta achar um conta aberta
         Account account = openAccountService.getAccountOpen(cpf);
+
+        // Procura a ultima conta que foi fechada
         if(account == null)
-            return ResponseEntity.status(500).body("Cliente não possui uma conta aberta");
+        {
+            account = accountLastClosedService.accountLastClosed(cpf);
+            if(account == null)
+                return ResponseEntity.status(500).body("Cliente não possui nenhuma conta!");
+        }
+
 
         int accountId = account.getAccountId();
         ClientResumeRequest clientResumeRequest = new ClientResumeRequest();
@@ -97,9 +108,25 @@ public class ClientController {
         if(covert != null)
             covertValue = covert.getValue();
 
-        TipValuesRequest tips = tipCalculationService.tipCalculation(accountId);
-        double accountValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
-        double consumptionValue = accountValue - tips.getTipFullValue();
+        double consumptionValue = 0.0;
+        double accountValue = 0.0;
+        TipValuesRequest tips;
+
+        if(account.isOpen()) {
+            tips = tipCalculationService.tipCalculation(accountId);
+            accountValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
+        }else
+        {
+            tips = new TipValuesRequest();
+
+            tips.setTipFoodValue(account.getTipFood());
+            tips.setTipDrinkValue(account.getTipDrink());
+            tips.setTipFoodValue(account.getTipFood() + account.getTipDrink());
+
+            accountValue = account.getValue();
+        }
+
+        consumptionValue = accountValue - tips.getTipFullValue();
 
         clientResumeRequest.setConsumptions(consumptionDAO.findByAccountId(accountId));
         clientResumeRequest.setAccountValue(accountValue);

@@ -7,7 +7,7 @@ import com.serverBar.serverBar.Request.ItemRequest.ItemMoreSaleRequest;
 import com.serverBar.serverBar.Request.TipRequest.TipRequest;
 import com.serverBar.serverBar.Services.BarResumeService;
 import com.serverBar.serverBar.Services.ItemResumeService;
-import com.serverBar.serverBar.Services.TipService;
+import com.serverBar.serverBar.Services.TipService.TipManagerService;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class BarController {
     @Autowired
     private BarResumeService barResumeService;
     @Autowired
-    private TipService tipService;
+    private TipManagerService tipService;
     @Autowired
     private ItemInterface itemDAO;
     @Autowired

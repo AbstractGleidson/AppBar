@@ -10,7 +10,7 @@ public class Client {
 
     @Id // Defines this field as a primary key
     @Column(name = "cpf") // Relates this attribute to the database column
-    private int cpf;
+    private String cpf;
 
     @Column(name = "nome", length = 100, nullable = false) // Relates this attribute to the database column
     private String name;
@@ -18,13 +18,13 @@ public class Client {
     public void setName(String name) {
         this.name = name;
     }
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
     public String getName() {
         return name;
     }
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 }
