@@ -2,9 +2,9 @@ import "../Estilo/Negocio.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-//Componentes
-import Button from "../../components/Button"
-import Input from "../../components/Input"
+// Componentes
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 
 export default function Negocio() {
   const [cou, setCou] = useState("");
@@ -12,19 +12,49 @@ export default function Negocio() {
   const [com, setCom] = useState("");
   const navigate = useNavigate();
 
-  function atualizar() {
-    //Checa a validade dos valores 
-    
-    const dados = {
-      cou : cou,
-      beb : beb,
-      com : com
+  async function atualizar() {
+
+    // Atualizar couvert
+    if (cou !== "") {
+      const responseCouvert = await fetch(
+        `http://localhost:8080/bar/covert/${cou}`,
+        { method: "PUT" }
+      );
+
+      if (!responseCouvert.ok) {
+        alert("Erro ao atualizar couvert!");
+      } else {
+        alert("Couvert atualizado!");
+      }
     }
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
+    // Enviar gorjetas
+    if (beb !== "" || com !== "") {
 
-    alert("Atualização subida com sucesso!")
-    navigate(-1)
+      const tipData = {
+        tipPercentDrink: beb === "" ? null : Number(beb),
+        tipPercentFood: com === "" ? null : Number(com),
+      };
+
+      const responseTip = await fetch(`http://localhost:8080/bar/tip`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(tipData),
+      });
+
+      const msg = await responseTip.text();
+
+      if (responseTip.ok) {
+        alert(msg);
+      } else {
+        alert(msg);
+      }
+    }
+
+    alert("Atualização concluída!");
+    navigate(-1);
   }
 
   return (
@@ -32,31 +62,27 @@ export default function Negocio() {
       <div className="Negocio-card">
 
         <Input
-          type = "text"
-          placeholder = "Valor do Couvert (Vazio para não alterar)."
-          value = {cou}
+          type="text"
+          placeholder="Valor do Couvert (Vazio para não alterar)."
+          value={cou}
           onChange={(e) => setCou(e.target.value)}
         />
 
         <Input
-          type = "text"
-          placeholder = "Porcentagem das bebidas (Vazio para não alterar)."
-          value = {beb}
+          type="text"
+          placeholder="Porcentagem das bebidas (Vazio para não alterar)."
+          value={beb}
           onChange={(e) => setBeb(e.target.value)}
         />
 
         <Input
-          type = "text"
-          placeholder = "Porcentagem das comidas (Vazio para não alterar)."
-          value = {com}
+          type="text"
+          placeholder="Porcentagem das comidas (Vazio para não alterar)."
+          value={com}
           onChange={(e) => setCom(e.target.value)}
         />
 
-        <Button 
-          texto = "Confirmar"
-          onClick={() => atualizar()} 
-        />
-
+        <Button texto="Confirmar" onClick={atualizar} />
       </div>
     </div>
   );

@@ -42,9 +42,23 @@ public class BarController {
 
     @PostMapping("bar/tip")
     public ResponseEntity<String> upDateTips(@RequestBody TipRequest request) throws  IOException {
-        tipService.saveTips(request);
+        TipRequest tips = tipService.loadTipsPercents();
 
-        return  ResponseEntity.ok(String.format("Porcetagem de gorjeta atualizada: Comida - %.2f%%, Bebida - %.2f%%", request.getTipPercentFood(), request.getTipPercentDrink()));
+        System.out.printf(
+                "Porcentagem de gorjeta atualizada: Comida - %s, Bebida - %s%n",
+                request.getTipPercentFood() == null ? "null" : String.format("%.2f", request.getTipPercentFood()),
+                request.getTipPercentDrink() == null ? "null" : String.format("%.2f", request.getTipPercentDrink())
+        );
+
+        if(request.getTipPercentDrink() != null)
+            tips.setTipPercentDrink(request.getTipPercentDrink());
+
+        if(request.getTipPercentFood() != null)
+            tips.setTipPercentFood(request.getTipPercentFood());
+
+        tipService.saveTips(tips);
+
+        return  ResponseEntity.ok(String.format("Porcetagem de gorjeta atualizada: Comida - %.2f%%, Bebida - %.2f%%", tips.getTipPercentFood(), tips.getTipPercentDrink()));
     }
 
     @GetMapping("/bar/item/more/sale")

@@ -8,26 +8,43 @@ import Input from "../../components/Input"
 
 export default function Edicao() {
   const [id, setId] = useState("");
-  const [valor, setValor] = useState("");
-  const [nome, setNome] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [valor, setValor] = useState(null);
+  const [nome, setNome] = useState(null);
+  const [tipo, setTipo] = useState(null);
   const navigate = useNavigate();
 
-  function atualizar() {
+  async function atualizar() {
     //Checa a validade dos valores 
     
     const dados = {
-      id: id,
-      valor: valor,
-      nome: nome,
-      tipo: tipo
+      number_item: id,
+      value: valor,
+      name: nome,
+      type: tipo,
+      available: null
     }
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
+    const response = await fetch(
+        `http://localhost:8080/item`, 
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-    alert("Atualização subida com sucesso!")
-    navigate(-1)
-  }
+          body: JSON.stringify(dados)
+        }
+    );
+
+      if(!response.ok){
+          const msg = await response.text();
+          alert(msg)
+        }
+        else{
+          alert("item atualizado com sucesso!");
+          navigate(-1);
+      }
+    }
 
   return (
     <div className="Edicao-page">

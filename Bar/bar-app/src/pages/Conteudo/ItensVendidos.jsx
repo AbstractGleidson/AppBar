@@ -1,54 +1,53 @@
 import "../Estilo/ItensVendidos.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Cliente() {
-  const navigate = useNavigate();
+  const [itens, setItens] = useState([]);
 
-  //Vai receber o Json
-  const mesas = [
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2},
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  },
-    { "id": 1, "nome": "Churrasco", "tipo": "Comida",  "preco": 24.50, "quantidade" : 2, "Subtotal" : "48,00" },
-    { "id": 2, "nome": "Limonada", "tipo": "Bebida", "preco": 6.30 , "quantidade" : 4, "Subtotal" : "24,00"  }
-  ];
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const response = await fetch("http://localhost:8080/bar/item/more/sale");
 
- 
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados dos itens vendidos.");
+        }
+
+        const data = await response.json();
+        setItens(data);
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar relatório.");
+      }
+    }
+
+    carregarDados();
+  }, []);
+
+  // Enquanto não carregou nada, mostra carregando
+  if (itens.length === 0) {
+    return <h2>Carregando...</h2>;
+  }
 
   return (
     <div className="Vendidos-page">  
-    <h2 className="Vendidos-titulo"> Itens mais vendidos </h2>
+      <h2 className="Vendidos-titulo">Itens mais vendidos</h2>
+      
       <div className="cabecalho">
-        <h3 className="item1"> Id </h3>
-        <h3 className="item2"> Nome </h3>
-        <h3 className="item3"> Tipo </h3>
-        <h3 className="item4"> Preço </h3>
-        <h3 className="item5"> Quantidade </h3>
+        <h3 className="item1">Id</h3>
+        <h3 className="item2">Nome</h3>
+        <h3 className="item5">Quantidade</h3>
       </div>
+
       <div className="Vendidos-container">
         <ul className="lista">
-          {mesas
-            .map(item => (
-              <li className="Vendidos-item">
-                <strong>{item.id}</strong>
-                <span className="nome">{item.nome}</span>
-                <span className="tipo">{item.tipo}</span>
-                <span className="preco">{item.preco.toFixed(2)}</span>
-                <span className="quant"> {item.quantidade}</span>
-              </li>
-            ))}
+          {itens.map((item) => (
+            <li key={item.item_id} className="Vendidos-item">
+              <strong>{item.item_id}</strong>
+              <span className="nome">{item.name}</span>
+              <span className="quant">{item.quantity}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
