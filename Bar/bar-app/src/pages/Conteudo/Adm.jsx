@@ -22,7 +22,7 @@ export default function Adm() {
 
           <Button 
             texto = "Faturamento por período"
-            onClick={() => navigate("/Adm/Faturamento")}
+            onClick={() => navigate("/Adm/Periodo")}
           />
 
           <Button 

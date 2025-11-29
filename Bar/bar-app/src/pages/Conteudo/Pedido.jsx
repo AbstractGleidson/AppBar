@@ -14,6 +14,7 @@ export default function Pedido() {
   const [motivo, setMotivo] = useState("");
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   async function registrar() {
     //Checa a validade dos valores
     if(role === "Cancelar" && motivo === "") {
@@ -26,6 +27,28 @@ export default function Pedido() {
         num_item: id,
         quantidade: quant,
       }
+=======
+  function registrar() {
+    if(role.trim() == "") {
+      alert("Selecione uma opção de registro.")
+      return;
+    }
+
+    if(role === "Cancelar" && motivo.trim() === "") {
+      alert("Cancelamentos devem incluir motivos!")
+      return;
+    }
+    
+    if(id.trim() === "" || quant.trim() == "" || mesa.trim() == "") {
+      alert("Os campos não podem ser vazios.")
+      return;
+    }
+
+    if(!(/^[0-9]+$/.test(mesa.trim())) || !(/^[0-9]+$/.test(quant.trim())) || !(/^[0-9]+$/.test(id.trim()))) {
+      alert("Os campos devem conter apenas números.")
+      return;
+    }
+>>>>>>> main
 
       const response = await fetch(
         `http://localhost:8080/consumption`, 
@@ -76,21 +99,21 @@ export default function Pedido() {
       <div className="Pedido-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Número da mesa"
           value = {mesa}
           onChange={(e) => setMesa(e.target.value)}
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Id do Item"
           value = {id}
           onChange={(e) => setId(e.target.value)}
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Quantidade"
           value = {quant}
           onChange={(e) => setQuant(e.target.value)}

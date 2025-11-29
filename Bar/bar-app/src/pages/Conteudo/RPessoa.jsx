@@ -12,7 +12,16 @@ export default function RPessoa() {
   const navigate = useNavigate();
 
   async function cadastro() {
-    
+
+    if(nome === "" || cpf === "") {
+      alert("Campos não podem ser vazios.");
+      return;
+    }
+    if(!(/^[0-9]+$/.test(cpf))) {
+      alert("O campo deve conter apenas números.")
+      return;
+    }
+
     const dados = {
       name : nome,
       cpf: cpf
@@ -31,8 +40,8 @@ export default function RPessoa() {
     ); //Tem que fazer um post de Nome e Cpf
 
 
-    if(!response.ok)
-      alert(response.text());
+    if(!response.ok) //Erro se usuário já existe
+      alert();
     
     else{
       alert("Cadastro bem sucedido!");
@@ -52,7 +61,7 @@ export default function RPessoa() {
         />
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Cpf"
           value = {cpf}
           onChange={(e) => setCpf(e.target.value)}

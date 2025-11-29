@@ -17,6 +17,7 @@ import Cardapio from "./pages/Conteudo/Cardapio"
 import Cadastradas from "./pages/Conteudo/Cadastradas"
 import ItensVendidos from "./pages/Conteudo/ItensVendidos"
 import MaiorFaturamento from "./pages/Conteudo/MaiorFaturamento"
+import Periodo from "./pages/Conteudo/Periodo"
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/Adm" element = {<Adm />} />
           <Route path="/Adm/Edicao" element = {<Edicao />} />
           <Route path="/Adm/Negocio" element = {<Negocio />} />
+          <Route path="/Adm/Periodo" element = {<Periodo/>} />
           <Route path="/Adm/ItensVendidos" element = {<ItensVendidos/>} />
           <Route path="/Adm/MaiorFaturamento" element = {<MaiorFaturamento/>} />
 

@@ -11,7 +11,24 @@ export default function RPagamento() {
   const [valor, setValor] = useState("");
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   async function pagamento() {
+=======
+  function pagamento() {
+
+    
+    if(mesa.trim() === "" || valor.trim() === "") {
+      alert("Os campos não podem ser vazios.");
+      return;
+    }
+
+    if(!(/^[0-9]+$/.test(mesa.trim()) ) || !(/^[0-9]+(,[0-9]{1,2})?$/.test(valor.trim())) ) {
+      alert("Os campos devem possuir valores válidos.");
+      return;
+    }
+
+
+>>>>>>> main
     
     const dados = {
       conta_id: mesa,
@@ -45,7 +62,7 @@ export default function RPagamento() {
       <div className="RPagamento-card">
 
         <Input
-          type = "text"
+          type = "number"
           placeholder = "Id da Mesa"
           value = {mesa}
           onChange={(e) => setMesa(e.target.value)}
