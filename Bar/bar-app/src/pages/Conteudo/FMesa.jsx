@@ -12,6 +12,14 @@ export default function FMesa() {
 
   async function fechamento() {
 
+    if(mesa.trim() === "") {
+      alert("O campo não pode estar vazio.")
+    }
+    if(!(/^[0-9]+$/.test(mesa.trim()))) {
+      alert("O campo deve possuir apenas números.")
+      return;
+    }
+
     const dados = {
       client_cpf: null,
       account_id: mesa,
@@ -29,7 +37,7 @@ export default function FMesa() {
       body: JSON.stringify(dados)
     });
 
-    if(!response.ok)
+    if(!response.ok) //Erro se mesa não existe ou já está fechada
       alert("Mesa não existente!");
     else{
       const data = await response.json();

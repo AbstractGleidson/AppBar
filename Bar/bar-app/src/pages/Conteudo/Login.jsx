@@ -12,9 +12,19 @@ export default function Login() {
   const navigate = useNavigate();
 
   async function entrar() {
-    if(role !== "Admin" && role !== "Garcom" && role != "Cliente") {
-      alert("Selecione uma função!");
-      return
+    if(role === "") {
+      alert("Selecione uma opção pra logar!");
+      return;
+    }
+
+    if(senha.trim() === "") {
+      alert("Os campos não podem ser vazios!");
+      return;
+    }
+
+    if(!(/^[0-9]+$/.test(senha.trim()))) {
+      alert("O campo deve conter apenas números.")
+      return;
     }
 
     if (role === "Admin") {
@@ -25,7 +35,7 @@ export default function Login() {
 
       const response = await fetch(`http://localhost:8080/client/${senha}`);
 
-      if(!response.ok)
+      if(!response.ok) //Erro se usuário não existe no banco de dados
         alert("Usuário não cadastrado!");
 
       else{
@@ -73,7 +83,6 @@ export default function Login() {
           onClick = {() => entrar()}
         />
       </div>
-      <p> {senha} </p>
     </div>
   );
 }

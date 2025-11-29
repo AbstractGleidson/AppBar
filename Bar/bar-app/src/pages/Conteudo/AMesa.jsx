@@ -18,6 +18,19 @@ export default function AMesa() {
 
   async function abertura() {
 
+    if(cpf.trim() === "" || quant.trim() === "") {
+      alert("Os campos não podem ser vazios.");
+      return;
+    }
+    if(!(/^[0-9]+$/.test(cpf.trim())) || !(/^[0-9]+$/.test(quant.trim()))) {
+      alert("Os campos devem possuir apenas números.")
+      return;
+    }
+    if(quant === 0) {
+      alert("Quantidade deve ser maior do que zero.")
+      return;
+    }
+
     const dados = {
       cpf_client: cpf,
       peoples: quant,
@@ -37,7 +50,7 @@ export default function AMesa() {
     ); //Tem que fazer um post de Cpf, Quantidade de pessoas e Couvert
 
 
-    if(!response.ok)
+    if(!response.ok) //Erro se Usuário não existe ou se ele já possui uma conta aberta
       alert(response.text());
     
     else{

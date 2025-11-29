@@ -14,7 +14,17 @@ export default function Edicao() {
   const navigate = useNavigate();
 
   function atualizar() {
-    //Checa a validade dos valores 
+    
+    if(id.trim() === "") {
+      alert("Campo do id deve ser preenchido.");
+      return;
+    }
+
+    if(!(/^[0-9]+$/.test(id.trim())) || !(/^[0-9]+(,[0-9]{1,2})?$/.test(valor.trim())) || tipo.trim().toLowerCase() !== "comida" && tipo.trim().toLowerCase() !== "bebida") {
+      alert("Os campos devem possuir dados válidos.");
+      return;
+    }
+
     
     const dados = {
       id: id,

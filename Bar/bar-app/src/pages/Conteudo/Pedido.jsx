@@ -15,11 +15,25 @@ export default function Pedido() {
   const navigate = useNavigate();
 
   function registrar() {
-    //Checa a validade dos valores
-    if(role === "Cancelar" && motivo === "") {
+    if(role.trim() == "") {
+      alert("Selecione uma opção de registro.")
+      return;
+    }
+
+    if(role === "Cancelar" && motivo.trim() === "") {
       alert("Cancelamentos devem incluir motivos!")
-      return
-    } 
+      return;
+    }
+    
+    if(id.trim() === "" || quant.trim() == "" || mesa.trim() == "") {
+      alert("Os campos não podem ser vazios.")
+      return;
+    }
+
+    if(!(/^[0-9]+$/.test(mesa.trim())) || !(/^[0-9]+$/.test(quant.trim())) || !(/^[0-9]+$/.test(id.trim()))) {
+      alert("Os campos devem conter apenas números.")
+      return;
+    }
 
     const dados = {
       mesa: mesa,

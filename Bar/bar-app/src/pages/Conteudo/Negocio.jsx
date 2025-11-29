@@ -13,7 +13,11 @@ export default function Negocio() {
   const navigate = useNavigate();
 
   function atualizar() {
-    //Checa a validade dos valores 
+
+    if(!(/^[0-9]+(,[0-9]{1,2})?$/.test(cou.trim())) || !(/^[0-9]+(,[0-9]{1,2})?$/.test(beb.trim())) || !(/^[0-9]+(,[0-9]{1,2})?$/.test(com.trim()))) {
+      alert("Os campos devem possuir dados válidos.");
+      return;
+    }
     
     const dados = {
       cou : cou,
