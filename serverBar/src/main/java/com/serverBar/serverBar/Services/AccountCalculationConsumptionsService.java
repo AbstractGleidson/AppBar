@@ -1,9 +1,7 @@
 package com.serverBar.serverBar.Services;
 
-import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
-import com.serverBar.serverBar.Request.TipRequest;
-import com.serverBar.serverBar.models.Account;
+import com.serverBar.serverBar.Request.TipRequest.TipRequest;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;

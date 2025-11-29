@@ -4,14 +4,12 @@ import com.serverBar.serverBar.DAOs.ItemInterface;
 import com.serverBar.serverBar.Request.BarResumeRequest;
 import com.serverBar.serverBar.Request.ItemRequest.ItemMoreRevenueRequest;
 import com.serverBar.serverBar.Request.ItemRequest.ItemMoreSaleRequest;
-import com.serverBar.serverBar.Request.TipRequest;
+import com.serverBar.serverBar.Request.TipRequest.TipRequest;
 import com.serverBar.serverBar.Services.BarResumeService;
 import com.serverBar.serverBar.Services.ItemResumeService;
 import com.serverBar.serverBar.Services.TipService;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

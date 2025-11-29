@@ -4,9 +4,12 @@ import com.serverBar.serverBar.DAOs.ClientInterface;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.DAOs.ItemInterface;
 import com.serverBar.serverBar.Request.ClientRequest.ClientResumeRequest;
+import com.serverBar.serverBar.Request.TipRequest.TipValuesRequest;
 import com.serverBar.serverBar.Services.AccountCalculationConsumptionsService;
 import com.serverBar.serverBar.Services.AccountCalculationValueService;
+import com.serverBar.serverBar.Services.OpenAccountService;
 import com.serverBar.serverBar.Services.TipCalculationService;
+import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Client;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @RestController
 public class ClientController {
@@ -32,6 +34,8 @@ public class ClientController {
     private TipCalculationService tipCalculationService;
     @Autowired
     private ItemInterface itemDAO;
+    @Autowired
+    private OpenAccountService openAccountService;
 
     @GetMapping("/clients")
     public ArrayList<Client> getClients() // Recover all database clients
@@ -77,23 +81,32 @@ public class ClientController {
     }
 
     // Faz um resumo da conta de um cliente
-    @GetMapping("/client/resume/{accountId}")
-    public ResponseEntity<ClientResumeRequest> getResume(@PathVariable int accountId) throws IOException {
+    @GetMapping("/client/resume/{cpf}")
+    public ResponseEntity<?> getResume(@PathVariable int cpf) throws IOException {
+
+        Account account = openAccountService.getAccountOpen(cpf);
+        if(account == null)
+            return ResponseEntity.status(500).body("Cliente não possui uma conta aberta");
+
+        int accountId = account.getAccountId();
         ClientResumeRequest clientResumeRequest = new ClientResumeRequest();
+
 
         Item covert = itemDAO.findById(0).orElse(null);
         double covertValue = 0;
         if(covert != null)
             covertValue = covert.getValue();
 
-        double tip = tipCalculationService.tipCalculation(accountId);
+        TipValuesRequest tips = tipCalculationService.tipCalculation(accountId);
         double accountValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
-        double consumptionValue = accountValue - tip;
+        double consumptionValue = accountValue - tips.getTipFullValue();
 
         clientResumeRequest.setConsumptions(consumptionDAO.findByAccountId(accountId));
         clientResumeRequest.setAccountValue(accountValue);
         clientResumeRequest.setCovert(covertValue);
-        clientResumeRequest.setTip(tip);
+        clientResumeRequest.setTipFull(tips.getTipFullValue());
+        clientResumeRequest.setTipDrink(tips.getTipDrinkValue());
+        clientResumeRequest.setTipFood(tips.getTipFoodValue());
         clientResumeRequest.setConsumptionsValue(consumptionValue);
 
         return ResponseEntity.ok().body(clientResumeRequest);

@@ -32,7 +32,11 @@ export default function Login() {
         const data = await response.json();
 
         alert(JSON.stringify(data));
-        navigate("/Cliente");
+        navigate(
+          "/Cliente", 
+          {state: {cpf: senha}
+          }
+        );
       }
     }
   }
@@ -73,7 +77,6 @@ export default function Login() {
           onClick = {() => entrar()}
         />
       </div>
-      <p> {senha} </p>
     </div>
   );
 }

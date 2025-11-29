@@ -1,4 +1,4 @@
-package com.serverBar.serverBar.Request;
+package com.serverBar.serverBar.Request.TipRequest;
 
 public class TipRequest {
     private Double tipPercentDrink;

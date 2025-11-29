@@ -47,23 +47,20 @@ public class AccountController {
     public ResponseEntity<ArrayList<AccountAllRequest>>getAccounts() // Recover all database accounts
     {
         // Return List of accounts or Empty List
-        ArrayList<Account> lista = (ArrayList<Account>) accountDAO.findAll();
-        ArrayList<AccountAllRequest> Response = new ArrayList<>();
-        for(Account account : lista) {
-            AccountAllRequest cara = new AccountAllRequest();
-            cara.setId(account.getId());
-            cara.setCpf(account.getClient().getCpf());
-            cara.setPessoas(account.getPeoples());
-            cara.setOpen(account.isOpen());
+        ArrayList<Account> accounts = (ArrayList<Account>) accountDAO.findAll();
+        ArrayList<AccountAllRequest> request = new ArrayList<>();
+        for(Account account : accounts) {
+            AccountAllRequest tempRequest = new AccountAllRequest();
+            tempRequest.setId(account.getId());
+            tempRequest.setCpf(account.getClient().getCpf());
+            tempRequest.setPessoas(account.getPeoples());
+            tempRequest.setOpen(account.isOpen());
 
-            ArrayList<Consumption> consumos = consumptionDAO.findByAccountId(account.getId());
-            for(Consumption consumo : consumos) {
-                if(consumo.getItem().getNumber_item() == 0) cara.setCouvert(true);
-            }
+            tempRequest.setCouvert(consumptionDAO.existsCouvertByAccountId(account.getAccountId()));
 
-            Response.add(cara);
+            request.add(tempRequest);
         }
-        return ResponseEntity.ok(Response);
+        return ResponseEntity.ok(request);
     }
 
     @GetMapping("/account/{id}")

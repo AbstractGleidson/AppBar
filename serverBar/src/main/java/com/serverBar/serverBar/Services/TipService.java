@@ -1,7 +1,7 @@
 package com.serverBar.serverBar.Services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.serverBar.serverBar.Request.TipRequest;
+import com.serverBar.serverBar.Request.TipRequest.TipRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

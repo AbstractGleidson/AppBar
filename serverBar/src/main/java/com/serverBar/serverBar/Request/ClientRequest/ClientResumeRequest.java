@@ -8,9 +8,11 @@ public class ClientResumeRequest {
 
     private ArrayList<Consumption> consumptions;
     private double consumptionsValue;
-    private double tip;
+    private double tipFull;
     private double accountValue;
     private double covert;
+    private double tipDrink;
+    private double tipFood;
 
     public void setAccountValue(double accountValue) {
         this.accountValue = accountValue;
@@ -28,8 +30,8 @@ public class ClientResumeRequest {
         this.covert = covert;
     }
 
-    public void setTip(double tip) {
-        this.tip = tip;
+    public void setTipFull(double tipFull) {
+        this.tipFull = tipFull;
     }
 
     public ArrayList<Consumption> getConsumptions() {
@@ -48,7 +50,23 @@ public class ClientResumeRequest {
         return covert;
     }
 
-    public double getTip() {
-        return tip;
+    public double getTipFull() {
+        return tipFull;
+    }
+
+    public double getTipDrink() {
+        return tipDrink;
+    }
+
+    public double getTipFood() {
+        return tipFood;
+    }
+
+    public void setTipDrink(double tipDrink) {
+        this.tipDrink = tipDrink;
+    }
+
+    public void setTipFood(double tipFood) {
+        this.tipFood = tipFood;
     }
 }

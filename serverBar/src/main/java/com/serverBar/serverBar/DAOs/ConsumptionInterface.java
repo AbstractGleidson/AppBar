@@ -1,6 +1,7 @@
 package com.serverBar.serverBar.DAOs;
 
 import com.serverBar.serverBar.models.Consumption;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -16,4 +17,13 @@ public interface ConsumptionInterface extends CrudRepository<Consumption, Intege
 
     // Find consumptions by client name
     ArrayList<Consumption> findByAccountClientName(String nome);
+
+    @Query("""
+       SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END
+       FROM Consumption c
+       WHERE c.account.id = :accountId
+         AND c.item.number_item = 0
+       """)
+    boolean existsCouvertByAccountId(int accountId);
+
 }
