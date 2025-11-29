@@ -14,24 +14,61 @@ export default function Pedido() {
   const [motivo, setMotivo] = useState("");
   const navigate = useNavigate();
 
-  function registrar() {
+  async function registrar() {
     //Checa a validade dos valores
     if(role === "Cancelar" && motivo === "") {
       alert("Cancelamentos devem incluir motivos!")
       return
     } 
+    else if(role === "Registrar"){
+      const dados = {
+        conta_id: mesa,
+        num_item: id,
+        quantidade: quant,
+      }
 
-    const dados = {
-      mesa: mesa,
-      id: id,
-      quant: quant,
-      motivo: motivo
+      const response = await fetch(
+        `http://localhost:8080/consumption`, 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(dados)
+        }
+      );
+
+
+      if(!response.ok){
+        const msg = await response.text();
+        alert(msg)
+      }
+      else{
+        alert("Cadastro bem sucedido!");
+        navigate(-1);
+      }
     }
+    else
+    {
+      const response = await fetch(
+        `http://localhost:8080/consumptions/${mesa}`, 
+        {
+          method: "Delete",
+        }
+      );
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
-    
-    alert("Atualização subida com sucesso!")
-    navigate(-1)
+
+      if(!response.ok)
+      {
+        const msg = await response.text();
+        alert(msg)
+      }
+      else{
+        alert("Pedido cancelado!");
+        navigate(-1);
+      }
+    }
   }
 
   return (

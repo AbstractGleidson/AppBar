@@ -11,17 +11,33 @@ export default function RPagamento() {
   const [valor, setValor] = useState("");
   const navigate = useNavigate();
 
-  function pagamento() {
+  async function pagamento() {
     
     const dados = {
-      mesa: mesa,
+      conta_id: mesa,
       valor: valor
     }
 
-    JSON.stringify(dados, null, 2) //Passar pro DB
+    const response = await fetch(
+        `http://localhost:8080/pay`, 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-    alert("Pagamento bem sucedido!")
-    navigate(-1)
+          body: JSON.stringify(dados)
+        }
+    );
+
+    if(!response.ok){
+        const msg = await response.text();
+        alert(msg)
+      }
+      else{
+        alert("Cadastro bem sucedido!");
+        navigate(-1);
+    }
   }
 
   return (
