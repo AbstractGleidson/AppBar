@@ -13,12 +13,8 @@ export default function Edicao() {
   const [tipo, setTipo] = useState(null);
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   async function atualizar() {
     //Checa a validade dos valores 
-=======
-  function atualizar() {
->>>>>>> main
     
     if(id.trim() === "") {
       alert("Campo do id deve ser preenchido.");
