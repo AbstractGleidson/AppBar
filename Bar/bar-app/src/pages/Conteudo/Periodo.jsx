@@ -12,11 +12,16 @@ export default function RPessoa() {
   const navigate = useNavigate();
 
   async function cadastro() {
+    if(inicio.trim() === "" || fim.trim() === "") {
+      alert("Campos não podem estar vazios!");
+      return;
+    }
 
     const dados = {
-      begin: inicio,
-      end: fim 
+      inicio: inicio.trim(),
+      fim: fim.trim()
     }
+    //Passar string inicio e fim no formato aaaa-mm-dd
 
     navigate("/Adm/Periodo/Faturamento")
   }

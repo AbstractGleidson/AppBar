@@ -24,7 +24,7 @@ export default function Pedido() {
     }
 
     const dados = {
-      pedido_id: id,
+      pedido_id: id.trim(),
     }
 
     const response = await fetch(

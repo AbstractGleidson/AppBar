@@ -13,18 +13,18 @@ export default function RPessoa() {
 
   async function cadastro() {
 
-    if(nome === "" || cpf === "") {
+    if(nome.trim() === "" || cpf.trim() === "") {
       alert("Campos não podem ser vazios.");
       return;
     }
-    if(!(/^[0-9]+$/.test(cpf))) {
+    if(!(/^[0-9]+$/.test(cpf.trim()))) {
       alert("O campo deve conter apenas números.")
       return;
     }
 
     const dados = {
-      name : nome,
-      cpf: cpf
+      name : nome.trim(),
+      cpf: cpf.trim()
     }
 
     const response = await fetch(`

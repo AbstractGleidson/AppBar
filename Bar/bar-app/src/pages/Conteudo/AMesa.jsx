@@ -32,8 +32,8 @@ export default function AMesa() {
     }
 
     const dados = {
-      cpf_client: cpf,
-      peoples: quant,
+      cpf_client: cpf.trim(),
+      peoples: quant.trim(),
       couvert: ativo
     }
 

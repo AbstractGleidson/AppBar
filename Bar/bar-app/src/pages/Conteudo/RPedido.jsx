@@ -25,9 +25,9 @@ export default function Pedido() {
     }
 
     const dados = {
-      conta_id: mesa,
-      num_item: id,
-      quantidade: quant,
+      conta_id: mesa.trim(),
+      num_item: id.trim(),
+      quantidade: quant.trim(),
     }
 
     const response = await fetch(

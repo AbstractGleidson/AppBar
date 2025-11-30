@@ -19,7 +19,7 @@ export default function FMesa() {
       alert("O campo deve possuir apenas números.")
       return;
     }
-
+    setMesa(mesa.trim()); //Exclui os espaços da string mesa
     const response = await fetch(
       `http://localhost:8080/account/close/${mesa}`, {
       method: "PUT",

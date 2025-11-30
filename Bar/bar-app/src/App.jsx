@@ -1,4 +1,5 @@
 // src/App.jsx
+import "./pages/Estilo/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Conteudo/Login"
 import Garcom from "./pages/Conteudo/Garcom"
@@ -25,7 +26,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element = {<Login />} />
+        <Route path="/" element = {<Login/>} />
         <Route path="/Cliente" element = {<Cliente />} />
         <Route path="/AoG" element = {<AoG />} />
 

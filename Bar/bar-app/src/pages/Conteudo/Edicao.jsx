@@ -37,10 +37,10 @@ export default function Edicao() {
       tipoInt = (tipoInt === "Comida"? 1 : 2);
 
     const dados = {
-      number_item: id,
-      value: valor === ""? null: valor,
-      name: nome === ""? null: nome,
-      type: tipoInt, // Ajeitar isso depois para valor nulo
+      number_item: id.trim(),
+      value: valor === ""? null: valor.trim(),
+      name: nome === ""? null: nome.trim(),
+      type: tipoInt,
       available: null
     }
 

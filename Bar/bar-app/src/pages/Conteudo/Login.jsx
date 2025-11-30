@@ -1,6 +1,7 @@
 import "../Estilo/Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/Logo.png";
 
 //Componentes
 import Button from "../../components/Button"
@@ -21,7 +22,7 @@ export default function Login() {
       alert("Os campos não podem ser vazios!");
       return;
     }
-
+    setSenha(senha.trim()); //Tira os espaços de senha
     if (role === "Admin") {
         const response = await fetch(
             `http://localhost:8080/auth/login/admin`, 
@@ -92,6 +93,16 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <div className="imagem"> 
+        <img 
+          src={logo} 
+          alt="Logo" 
+          style={{ width: "100px", height: "auto" }} 
+        />
+      </div>
+      <div className="titulos">
+        <h2> Trabalho de POO - Bar System </h2>
+      </div>
       <div className="login-card">
         <div className="role-buttons">
         
@@ -125,6 +136,9 @@ export default function Login() {
           texto = "Entrar"
           onClick = {() => entrar()}
         />
+      </div>
+      <div className="nomes">
+        <h3> By Gleidson and Ivan </h3>
       </div>
     </div>
   );
