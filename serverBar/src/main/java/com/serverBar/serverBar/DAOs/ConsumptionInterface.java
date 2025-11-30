@@ -1,9 +1,11 @@
 package com.serverBar.serverBar.DAOs;
 
 import com.serverBar.serverBar.models.Consumption;
+import com.serverBar.serverBar.models.Pay;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 // CrudRepository<Object, primary key type>
@@ -26,4 +28,6 @@ public interface ConsumptionInterface extends CrudRepository<Consumption, Intege
        """)
     boolean existsCouvertByAccountId(int accountId);
 
+    @Query("SELECT c FROM Consumption c WHERE c.date BETWEEN :start AND :end") // Query criada de forma personalizada
+    public ArrayList<Consumption> findAllByDateBetween(LocalDateTime start, LocalDateTime end);
 }

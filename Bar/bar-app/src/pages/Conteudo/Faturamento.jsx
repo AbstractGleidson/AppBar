@@ -1,70 +1,79 @@
+import { useLocation } from "react-router-dom";
 import "../Estilo/Faturamento.css";
 import { useState, useEffect } from "react";
 
 export default function Cliente() {
-//   const [faturas, setFaturas] = useState([]);
+  const [faturas, setFaturas] = useState([]);
+  const [valorTotal, setValorTotal] = useState(0);
 
-//   useEffect(() => {
-//     async function carregarDados() {
-//       try {
-//         const response = await fetch("http://localhost:8080/bar/item/more/revenue");
+  const location = useLocation();
+  const start = location.state?.start;
+  const end = location.state?.end;
 
-//         if (!response.ok) {
-//           throw new Error("Erro ao buscar dados do faturamento.");
-//         }
+  function formatarData(data) {
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
 
-//         const data = await response.json();
-//         setItens(data);
-//       } catch (error) {
-//         console.error(error);
-//         alert("Erro ao carregar relatório.");
-//       }
-//     }
+  const startData = formatarData(start);
+  const endData = formatarData(end);
 
-//     carregarDados();
-//   }, []);
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/consumption/interval?startDate=${startData}&endDate=${endData}`
+        );
 
-//   // Correção: verifica se o array ainda está vazio
-//   if (faturas.length === 0) {
-//     return <h2>Carregando...</h2>;
-//   }
-  const faturas = [
-    {"valor": 24},
-    {"item_id": 1, "name": "Espetinho", "preco": 12, "quantidade": 2}
-  ]
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados do faturamento.");
+        }
 
-  //Uma fatura vai ter ID do item, nome do item, preço, quantidade e faturamento daquele pedido (quantidade * preço)
+        const data = await response.json();
 
-  const valorTotal = faturas.find(item => "valor" in item);
+        // Ajuste para o novo formato da resposta
+        setFaturas(data.consumptions || []);
+        setValorTotal(data.revenue || 0);
+
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar relatório.");
+      }
+    }
+
+    carregarDados();
+  }, []);
+
+  if (faturas.length === 0) {
+    return <h2>Carregando...</h2>;
+  }
+
   return (
     <div className="Faturamento-page">  
       <h2 className="Faturamento-titulo">Faturamento</h2>
 
       <div className="cabecalho">
-        <h3 className="item1">Id</h3>
-        <h3 className="item2">Nome</h3>
-        <h3 className="item3">Preço</h3>
-        <h3 className="item4">Quantidade</h3>
-        <h3 className="item5">Faturamento</h3>
+        <h3 className="item1">Nome</h3>
+        <h3 className="item3">Quantidade</h3>
+        <h3 className="item4">Data</h3>
+        <h3 className="item5">CPF Cliente</h3>
       </div>
 
       <div className="Faturamento-container">
         <ul className="lista">
-          {faturas
-          .filter(item => item.item_id)
-          .map(item => (
-            <li key={item.item_id} className="Faturamento-item">
-              <strong>{item.item_id}</strong>
-              <span className="nome">{item.name}</span>
-              <span className="preco">{item.preco.toFixed(2)}</span>
-              <span className="quant">{item.quantidade}</span>
-              <span className="fatu">{(item.quantidade*item.preco).toFixed(2)}</span>
+          {faturas.map((item, index) => (
+            <li key={index} className="Faturamento-item">
+              <strong>{item.nameItem}</strong>
+              <span className="quant">{item.quantity}</span>
+              <span className="data">{item.date}</span>
+              <span className="cpf">{item.client_cpf}</span>
             </li>
           ))}
         </ul>
       </div>
+
       <h2 className="total">
-        Valor Total: {valorTotal.valor.toFixed(2)}
+        Valor Total: {valorTotal.toFixed(2)}
       </h2>
     </div>
   );

@@ -23,7 +23,15 @@ export default function RPessoa() {
     }
     //Passar string inicio e fim no formato aaaa-mm-dd
 
-    navigate("/Adm/Periodo/Faturamento")
+    navigate(
+      "/Adm/Periodo/Faturamento",
+      {
+        state: {
+          start: inicio,
+          end: fim
+        }
+      }
+    )
   }
 
   return (

@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `BarSpring`.`Consumo` (
   `conta_id` INT NOT NULL,
   `num_item` INT NOT NULL,
   `quantidade` INT NOT NULL,
+  `data` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `fk_Consumo_Item1_idx` (`num_item` ASC) VISIBLE,
   INDEX `fk_Consumo_Conta1_idx` (`conta_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),

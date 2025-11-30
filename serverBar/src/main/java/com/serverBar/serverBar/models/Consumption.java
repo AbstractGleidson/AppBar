@@ -2,6 +2,8 @@ package com.serverBar.serverBar.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "consumo") // Define a relationship between the consumption class and the consumption table
 public class Consumption {
@@ -12,6 +14,9 @@ public class Consumption {
 
     @Column(name = "quantidade", nullable = false) // Relates this attribute to the database column
     private int quantity;
+
+    @Column(name = "data", nullable = true)
+    private LocalDateTime date;
 
     @OneToOne // Define a relationship one to one
     @JoinColumn(name = "num_item", nullable = false) // Relates this attribute to the database column
@@ -51,5 +56,13 @@ public class Consumption {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

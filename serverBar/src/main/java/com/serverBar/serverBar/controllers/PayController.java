@@ -5,6 +5,7 @@ import com.serverBar.serverBar.DAOs.PayInterface;
 import com.serverBar.serverBar.Request.PayRequest.PayPostRequest;
 import com.serverBar.serverBar.Request.PayRequest.PayPutRequest;
 import com.serverBar.serverBar.Request.PayRequest.PayRevenueRequest;
+import com.serverBar.serverBar.Services.PayService.PayIntervalCalculationService;
 import com.serverBar.serverBar.Services.PayService.PaymentService;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Pay;
@@ -28,6 +29,8 @@ public class PayController {
     private AccountInterface accountDAO;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private PayIntervalCalculationService payIntervalCalculationService;
 
     @GetMapping("/payments") // Recover all database payments
     public ArrayList<Pay> getPayments()
@@ -117,8 +120,6 @@ public class PayController {
                 pay.setValue(request.getValor());
         }
 
-
-
         // Save pay and return server response
         return ResponseEntity.ok().body(payDAO.save(pay));
     }
@@ -138,23 +139,13 @@ public class PayController {
     @GetMapping("/pay/interval")
     public ResponseEntity<?> getBarRecipe(@RequestParam String startDate, @RequestParam String endDate)
     {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Formatacao da data
+        try {
+            PayRevenueRequest request = payIntervalCalculationService.intervalPayCalculation(startDate, endDate);
 
-        LocalDate start = LocalDate.parse(startDate, format);
-        LocalDate end = LocalDate.parse(endDate, format);
-
-        LocalDateTime startDateTime = start.atStartOfDay();
-        LocalDateTime endDateTime = end.atTime(23, 59, 59);
-
-        ArrayList<Pay> payments = payDAO.findAllByDateBetween(startDateTime, endDateTime);
-
-        PayRevenueRequest request = new PayRevenueRequest();
-
-        for(Pay pay: payments)
-             request.revenueIncrement(pay.getValue());
-
-        request.setAmountPayments(payments.size());
-
-        return ResponseEntity.ok(request);
+            return ResponseEntity.ok(request);
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 }

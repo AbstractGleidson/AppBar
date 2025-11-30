@@ -3,16 +3,24 @@ package com.serverBar.serverBar.controllers;
 import com.serverBar.serverBar.DAOs.ConsumptionInterface;
 import com.serverBar.serverBar.DAOs.AccountInterface;
 import com.serverBar.serverBar.DAOs.ItemInterface;
+import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionIntervalReport;
+import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionIntervalRequest;
 import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPostRequest;
 import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPutRequest;
+import com.serverBar.serverBar.Request.PayRequest.PayRevenueRequest;
+import com.serverBar.serverBar.Services.PayService.PayIntervalCalculationService;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Item;
+import com.serverBar.serverBar.models.Pay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -25,6 +33,8 @@ public class ConsumptionController {
     private AccountInterface accountDAO;
     @Autowired
     private ItemInterface itemDAO;
+    @Autowired
+    private PayIntervalCalculationService payIntervalCalculationService;
 
     @GetMapping("/consumptions")
     public ArrayList<Consumption> getConsumptions() // Recover all database consumptions
@@ -136,4 +146,82 @@ public class ConsumptionController {
     {
         consumptionDAO.deleteById(id);
     }
+
+    @GetMapping("/consumption/interval")
+    public ResponseEntity<?> getBarConsumptionInterval(
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+
+        try {
+
+            System.out.println(startDate);
+            System.out.println(endDate);
+
+            // Formatos possiveis
+            DateTimeFormatter formatBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatUS = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+            LocalDate start;
+            LocalDate end;
+
+            // Tenta achar um dos tipos de formato de data Us ou BR
+            try {
+                start = LocalDate.parse(startDate, formatBR);
+                end = LocalDate.parse(endDate, formatBR);
+            } catch (Exception e1) {
+                // Tenta um se nao der tenta outro
+                try {
+                    start = LocalDate.parse(startDate, formatUS);
+                    end = LocalDate.parse(endDate, formatUS);
+                } catch (Exception e2) {
+                    return ResponseEntity.badRequest().body("Erro: formato de data inválido. Use dd/MM/yyyy ou MM/dd/yyyy.");
+                }
+            }
+
+            // 👉 Se a data inicial for maior que a final, inverte
+            if (start.isAfter(end)) {
+                LocalDate temp = start;
+                start = end;
+                end = temp;
+            }
+
+            LocalDateTime startDateTime = start.atStartOfDay();
+            LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+            System.out.println(startDateTime);
+            System.out.println(endDateTime);
+
+            DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            ArrayList<Consumption> consumptions = consumptionDAO.findAllByDateBetween(startDateTime, endDateTime);
+            ArrayList<ConsumptionIntervalRequest> request = new ArrayList<>();
+
+            PayRevenueRequest payRequest = payIntervalCalculationService.intervalPayCalculation(
+                    startDateTime.format(formatterOut),
+                    endDateTime.format(formatterOut)
+            );
+
+            // Montar resposta
+            for (Consumption c : consumptions) {
+                ConsumptionIntervalRequest r = new ConsumptionIntervalRequest();
+
+                r.setDate(c.getDate().format(formatBR));
+                r.setQuantity(c.getQuantity());
+                r.setNameItem(c.getItem().getName());
+                r.setClient_cpf(c.getAccount().getClient().getCpf());
+
+                request.add(r);
+            }
+
+            ConsumptionIntervalReport report = new ConsumptionIntervalReport();
+            report.setConsumptions(request);
+            report.setRevenue(payRequest.getRevenue());
+
+            return ResponseEntity.ok(report);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro: " + e.getMessage());
+        }
+    }
+
 }
