@@ -13,11 +13,12 @@ export default function RPessoa() {
 
   async function cadastro() {
 
-
     const dados = {
-      name : nome,
-      cpf: cpf
+      begin: inicio,
+      end: fim 
     }
+
+    navigate("/Adm/Periodo/Faturamento")
   }
 
   return (

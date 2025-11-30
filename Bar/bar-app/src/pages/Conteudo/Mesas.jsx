@@ -30,8 +30,13 @@ export default function Mesas() {
           />
 
           <Button 
-            texto = "Gerenciar pedidos"
-            onClick={() => navigate("/Garcom/Mesas/Pedido")}
+            texto = "Registrar pedidos"
+            onClick={() => navigate("/Garcom/Mesas/RPedido")}
+          />
+
+          <Button 
+            texto = "Cancelar pedidos"
+            onClick={() => navigate("/Garcom/Mesas/CPedido")}
           />
 
           <Button 

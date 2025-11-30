@@ -31,10 +31,10 @@ export default function Edicao() {
       return;
     }
 
-    const tipoInt = tipo === ""? null: tipo;
+    const tipoInt = (tipo === ""? null: tipo);
     
     if(tipoInt != null)
-      tipoInt = tipoInt === "Comida"? 1: 2;
+      tipoInt = (tipoInt === "Comida"? 1 : 2);
 
     const dados = {
       number_item: id,
