@@ -169,6 +169,9 @@ public class AccountController {
     public ResponseEntity<?> openAccount(@RequestBody AccountOpenRequest request)
     {
         try {
+            if(!validatedAccountService.validateOpenAccount(request.getCpf_client()))
+                return ResponseEntity.status(500).body("O cliente já tem uma conta aberta!");
+
             Client client = clientDAO.findById(request.getCpf_client()).orElse(null);
 
             if (client == null)
@@ -192,7 +195,7 @@ public class AccountController {
                 item.setName("Ingresso");
                 item.setNumber_item(0);
                 item.setAvailable(true);
-                item.setType(1);
+                item.setType(0);
                 item.setValue(0);
 
                 itemDAO.save(item);
@@ -220,7 +223,7 @@ public class AccountController {
 
         try {
             Account account = accountDAO.findById(accountId).orElse(null);
-            Double value = accountCalculationValueService.accountCalculation(accountId);
+            double value = accountCalculationValueService.accountCalculation(accountId);
             TipValuesRequest tips = tipCalculationService.tipCalculation(accountId);
 
             if (account == null) {

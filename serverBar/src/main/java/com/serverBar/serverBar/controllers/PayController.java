@@ -59,8 +59,8 @@ public class PayController {
 
     @PostMapping("/pay") // Save one new pay on database
     public ResponseEntity<?> postPay(@RequestBody PayPostRequest payRequest) throws IOException {
-        if(paymentService.validatedPayment(payRequest.getConta_id(), payRequest.getValor()))
-            return ResponseEntity.status(500).body("Não foi possivel realizar o pagamento, pois o valor é maior que a conta.");
+        if(!paymentService.validatedPayment(payRequest.getConta_id(), payRequest.getValor()))
+            return ResponseEntity.status(500).body("Conta já foi pago");
 
         // Check if account exists
         Optional<Account> account  = accountDAO.findById(payRequest.getConta_id());

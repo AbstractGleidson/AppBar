@@ -1,19 +1,19 @@
 package com.serverBar.serverBar.Request.ItemRequest;
 
 public class ItemMoreSaleRequest {
-    private int item_id;
+    private Number item_id;
     private String name;
-    private int quantity;
+    private Number quantity;
 
     public String getName() {
         return name;
     }
 
-    public int getItem_id() {
+    public Number getItem_id() {
         return item_id;
     }
 
-    public int getQuantity() {
+    public Number getQuantity() {
         return quantity;
     }
 
@@ -21,11 +21,11 @@ public class ItemMoreSaleRequest {
         this.name = name;
     }
 
-    public void setItem_id(int item_id) {
+    public void setItem_id(Number item_id) {
         this.item_id = item_id;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Number quantity) {
         this.quantity = quantity;
     }
 }

@@ -29,10 +29,9 @@ public class PaymentService {
         if (account == null)
             return false;
 
-        ArrayList<Consumption> accountConsumptions = consumptionDAO.findByAccountId(accountId);
         double valueAccount =  accountCalculationValueService.accountCalculationConsumptions(accountId);
         double payAccount = paymentFullAccountService.paymentFullAccountServe(accountId);
 
-        return (payAccount + payValue > valueAccount);
+        return (valueAccount - payAccount >= 0);
     }
 }

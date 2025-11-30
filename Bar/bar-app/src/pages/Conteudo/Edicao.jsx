@@ -8,9 +8,9 @@ import Input from "../../components/Input"
 
 export default function Edicao() {
   const [id, setId] = useState("");
-  const [valor, setValor] = useState(null);
-  const [nome, setNome] = useState(null);
-  const [tipo, setTipo] = useState(null);
+  const [valor, setValor] = useState("");
+  const [nome, setNome] = useState("");
+  const [tipo, setTipo] = useState("");
   const navigate = useNavigate();
 
   async function atualizar() {
@@ -31,11 +31,16 @@ export default function Edicao() {
       return;
     }
 
+    const tipoInt = tipo === ""? null: tipo;
+    
+    if(tipoInt != null)
+      tipoInt = tipoInt === "Comida"? 1: 2;
+
     const dados = {
       number_item: id,
-      value: valor,
-      name: nome,
-      type: tipo,
+      value: valor === ""? null: valor,
+      name: nome === ""? null: nome,
+      type: tipoInt, // Ajeitar isso depois para valor nulo
       available: null
     }
 

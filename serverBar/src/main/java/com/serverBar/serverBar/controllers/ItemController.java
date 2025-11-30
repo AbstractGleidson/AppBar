@@ -61,27 +61,45 @@ public class ItemController {
     @PutMapping("/item")
     public ResponseEntity<?> updateItem(@RequestBody ItemPutRequest request) // Updates a customer information
     {
-        if(request.getNumber_item() == 0)
-            return ResponseEntity.status(500).body("O ingresso não pode ser criado por este endpoint!");
+        try {
+            if (request.getNumber_item() == 0)
+                return ResponseEntity.status(500).body("O ingresso não pode ser criado por este endpoint!");
 
-        Item item = DAO.findById(request.getNumber_item()).orElse(null);
+            Item item = DAO.findById(request.getNumber_item()).orElse(null);
 
-        if(item == null)
-            return ResponseEntity.status(404).body("Não foi possível atualizar item, pois ele não existe!");
+            if (!(item == null)) {
+                if (request.getAvailable() != null)
+                    item.setAvailable(request.getAvailable());
 
-        if(request.getAvailable() != null)
-            item.setAvailable(request.getAvailable());
+                if (request.getName() != null)
+                    item.setName(request.getName());
 
-        if(request.getName() != null)
-            item.setName(request.getName());
+                if (request.getType() != null)
+                    item.setType(request.getType());
 
-        if(request.getType() != null)
-            item.setType(request.getType());
+                if (request.getValue() != null)
+                    item.setValue(request.getValue());
+            } else {
+                if (request.getValue() != null && request.getName() != null && request.getType() != null) {
+                    item = new Item();
 
-        if(request.getValue() != null)
-            item.setValue(request.getValue());
+                    item.setNumber_item(request.getNumber_item());
+                    item.setValue(request.getValue());
+                    item.setType(request.getType());
+                    item.setName(request.getName());
+                    item.setAvailable(true);
+                }
+            }
 
-        return ResponseEntity.ok().body(DAO.save(item)); // Return update item
+            if (item == null)
+                return ResponseEntity.status(404).body("Tentando criar um item com dados incompletos!");
+
+
+            return ResponseEntity.ok(DAO.save(item)); // Return update item
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @DeleteMapping("/cardapio")

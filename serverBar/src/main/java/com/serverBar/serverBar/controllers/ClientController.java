@@ -9,6 +9,8 @@ import com.serverBar.serverBar.Services.AccountService.AccountCalculationConsump
 import com.serverBar.serverBar.Services.AccountService.AccountCalculationValueService;
 import com.serverBar.serverBar.Services.AccountService.AccountLastClosedService;
 import com.serverBar.serverBar.Services.AccountService.AccountOpenService;
+import com.serverBar.serverBar.Services.PayService.PaymentFullAccountService;
+import com.serverBar.serverBar.Services.PayService.PaymentService;
 import com.serverBar.serverBar.Services.TipService.TipCalculationService;
 import com.serverBar.serverBar.models.Account;
 import com.serverBar.serverBar.models.Client;
@@ -39,6 +41,8 @@ public class ClientController {
     private AccountOpenService openAccountService;
     @Autowired
     private AccountLastClosedService accountLastClosedService;
+    @Autowired
+    private PaymentFullAccountService paymentFullAccountService;
 
     @GetMapping("/clients")
     public ArrayList<Client> getClients() // Recover all database clients
@@ -111,10 +115,11 @@ public class ClientController {
         double consumptionValue = 0.0;
         double accountValue = 0.0;
         TipValuesRequest tips;
+        double tempValue;
 
         if(account.isOpen()) {
             tips = tipCalculationService.tipCalculation(accountId);
-            accountValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
+            tempValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
         }else
         {
             tips = new TipValuesRequest();
@@ -122,14 +127,14 @@ public class ClientController {
             tips.setTipFoodValue(account.getTipFood());
             tips.setTipDrinkValue(account.getTipDrink());
             tips.setTipFoodValue(account.getTipFood() + account.getTipDrink());
-
-            accountValue = account.getValue();
+            tempValue = account.getValue();
         }
+        accountValue = tempValue - paymentFullAccountService.paymentFullAccountServe(accountId);
 
         consumptionValue = accountValue - tips.getTipFullValue();
 
         clientResumeRequest.setConsumptions(consumptionDAO.findByAccountId(accountId));
-        clientResumeRequest.setAccountValue(accountValue);
+        clientResumeRequest.setAccountValue(accountValue <= 0 ? 0 : accountValue);
         clientResumeRequest.setCovert(covertValue);
         clientResumeRequest.setTipFull(tips.getTipFullValue());
         clientResumeRequest.setTipDrink(tips.getTipDrinkValue());

@@ -20,28 +20,14 @@ export default function FMesa() {
       return;
     }
 
-    const dados = {
-      client_cpf: null,
-      account_id: mesa,
-      open: false,
-      peoples: null
-    }
-
     const response = await fetch(
-      `http://localhost:8080/account`, {
+      `http://localhost:8080/account/close/${mesa}`, {
       method: "PUT",
-      headers: {
-          "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify(dados)
     });
 
     if(!response.ok) //Erro se mesa não existe ou já está fechada
       alert("Mesa não existente!");
     else{
-      const data = await response.json();
-
       alert("Mesa fechada.");
       navigate(-1);
     }

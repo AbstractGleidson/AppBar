@@ -35,6 +35,19 @@ export default function Negocio() {
       com : com
     }
 
+    // Atualizar couvert
+    if (cou !== "") {
+      const responseCouvert = await fetch(
+        `http://localhost:8080/bar/covert/${cou}`,
+        { method: "PUT" }
+      );
+
+      if (!responseCouvert.ok) {
+        alert("Erro ao atualizar couvert!");
+      } else {
+        alert("Couvert atualizado!");
+      }
+
     // Enviar gorjetas
     if (beb !== "" || com !== "") {
 
@@ -60,8 +73,9 @@ export default function Negocio() {
       }
     }
 
-    alert("Atualização concluída!");
-    navigate(-1);
+      alert("Atualização concluída!");
+      navigate(-1);
+    }
   }
 
   return (

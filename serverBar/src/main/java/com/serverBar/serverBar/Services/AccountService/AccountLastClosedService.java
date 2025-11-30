@@ -22,10 +22,16 @@ public class AccountLastClosedService {
         }
 
         Account lastAccount = null;
+        boolean flag = false;
 
         for (Account account : accounts) {
-            if (!account.isOpen()) { // só contas fechadas
-                if (lastAccount == null || account.getDate_close().isAfter(lastAccount.getDate_close())) {
+            if(!flag && account != null && !account.isOpen())
+            {
+                flag = true;
+                lastAccount = account;
+            }
+            else if (account != null && !account.isOpen()) { // só contas fechadas
+                if (account.getDate_close().isAfter(lastAccount.getDate_close())) {
                     lastAccount = account; // atualiza para a mais recente
                 }
             }
