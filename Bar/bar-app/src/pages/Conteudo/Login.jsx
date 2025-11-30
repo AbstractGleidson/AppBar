@@ -6,13 +6,17 @@ import logo from "../../assets/Logo.png";
 //Componentes
 import Button from "../../components/Button"
 import Input from "../../components/Input"
+import QrCode from "../../components/QrCode"
 
 export default function Login() {
   const [role, setRole] = useState("");
   const [senha, setSenha] = useState("");
+  const [showQR, setShowQR] = useState(false);
+  const [qrLink, setQrLink] = useState("");
   const navigate = useNavigate();
 
   async function entrar() {
+    
     if(role === "") {
       alert("Selecione uma opção pra logar!");
       return;
@@ -22,6 +26,7 @@ export default function Login() {
       alert("Os campos não podem ser vazios!");
       return;
     }
+
     setSenha(senha.trim()); //Tira os espaços de senha
     if (role === "Admin") {
         const response = await fetch(
@@ -82,11 +87,16 @@ export default function Login() {
         const data = await response.json();
 
         alert("Login Realizado com sucesso");
-        navigate(
-          "/Cliente", 
-          {state: {cpf: senha}
-          }
-        );
+
+         const link = `http://localhost:5173/Cliente/${senha}`;
+
+        setQrLink(link);
+        setShowQR(true);//Imprime o QrCode
+        // navigate(
+        //   "/Cliente", 
+        //   {state: {cpf: senha}
+        //   }
+        // );
       }
     }
   }
@@ -140,6 +150,12 @@ export default function Login() {
       <div className="nomes">
         <h3> By Gleidson and Ivan </h3>
       </div>
+      {showQR && (
+      <QrCode
+          link={qrLink}
+          onClose={() => setShowQR(false)}
+        />
+      )}
     </div>
   );
 }
