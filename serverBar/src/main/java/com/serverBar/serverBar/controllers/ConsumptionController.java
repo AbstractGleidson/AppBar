@@ -178,7 +178,7 @@ public class ConsumptionController {
                 }
             }
 
-            // 👉 Se a data inicial for maior que a final, inverte
+            // Se a data inicial for maior que a final, inverte
             if (start.isAfter(end)) {
                 LocalDate temp = start;
                 start = end;
