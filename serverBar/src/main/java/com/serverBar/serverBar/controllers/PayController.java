@@ -148,7 +148,7 @@ public class PayController {
         try {
             PayRevenueRequest request = payIntervalCalculationService.intervalPayCalculation(startDate, endDate);
 
-            return ResponseEntity.ok(request);
+            return ResponseEntity.ok().body(request);
         }catch (Exception e)
         {
             return ResponseEntity.status(500).body("Erro: " + e);

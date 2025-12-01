@@ -80,7 +80,7 @@ public class BarController {
         // Monta a resposta
         ArrayList<ItemMoreRevenueRequest> report = itemResumeService.getItemRevenueReport();
 
-        return ResponseEntity.ok(report);
+        return ResponseEntity.ok().body(report);
     }
 
     // Get para o covert

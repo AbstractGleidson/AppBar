@@ -8,6 +8,7 @@ import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionIntervalReq
 import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPostRequest;
 import com.serverBar.serverBar.Request.ConsumptionRequest.ConsumptionPutRequest;
 import com.serverBar.serverBar.Request.PayRequest.PayRevenueRequest;
+import com.serverBar.serverBar.Services.ConsumptionIntervalCalculationService;
 import com.serverBar.serverBar.Services.PayService.PayIntervalCalculationService;
 import com.serverBar.serverBar.models.Consumption;
 import com.serverBar.serverBar.models.Account;
@@ -35,6 +36,8 @@ public class ConsumptionController {
     private ItemInterface itemDAO;
     @Autowired
     private PayIntervalCalculationService payIntervalCalculationService;
+    @Autowired
+    private ConsumptionIntervalCalculationService consumptionIntervalCalculationService;
 
     @GetMapping("/consumptions")
     public ArrayList<Consumption> getConsumptions() // Recover all database consumptions
@@ -206,7 +209,10 @@ public class ConsumptionController {
 
             DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-            ArrayList<Consumption> consumptions = consumptionDAO.findAllByDateBetween(startDateTime, endDateTime);
+            ArrayList<Consumption> consumptions = consumptionIntervalCalculationService.getConsumptionInterval(
+                    startDateTime.format(formatterOut),
+                    endDateTime.format(formatterOut)
+            );
             ArrayList<ConsumptionIntervalRequest> request = new ArrayList<>();
 
             PayRevenueRequest payRequest = payIntervalCalculationService.intervalPayCalculation(
@@ -230,7 +236,7 @@ public class ConsumptionController {
             report.setConsumptions(request);
             report.setRevenue(payRequest.getRevenue());
 
-            return ResponseEntity.ok(report);
+            return ResponseEntity.ok().body(report);
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erro: " + e.getMessage());

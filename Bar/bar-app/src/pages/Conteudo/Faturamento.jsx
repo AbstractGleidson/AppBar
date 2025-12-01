@@ -19,8 +19,6 @@ export default function Cliente() {
   const endData = formatarData(end);
 
   useEffect(() => {
-
-    alert(startData)
     async function carregarDados() {
       try {
         const response = await fetch(
@@ -32,10 +30,12 @@ export default function Cliente() {
         }
 
         const data = await response.json();
-
+        
         // Ajuste para o novo formato da resposta
-        setFaturas(data.consumptions || []);
-        setValorTotal(data.revenue || 0);
+        setFaturas(data.consumptions);
+        setValorTotal(data.revenue);
+
+        alert(valorTotal);
 
       } catch (error) {
         console.error(error);
@@ -47,7 +47,7 @@ export default function Cliente() {
   }, []);
 
   if (faturas.length === 0) {
-    return <div><h2>Carregando...</h2></div>;
+    return <h2>Carregando...</h2>;
   }
 
   return (
@@ -60,7 +60,6 @@ export default function Cliente() {
         <h3 className="item4">Data</h3>
         <h3 className="item5">CPF Cliente</h3>
       </div>
-
 
       <div className="Faturamento-container">
         <ul className="lista">
@@ -78,6 +77,6 @@ export default function Cliente() {
       <h2 className="total">
         Valor Total: {valorTotal.toFixed(2)}
       </h2>
-    </div>
-  );
+    </div>
+  );
 }

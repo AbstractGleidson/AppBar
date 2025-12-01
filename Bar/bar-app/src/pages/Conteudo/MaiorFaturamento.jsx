@@ -41,7 +41,7 @@ export default function Cliente() {
 
       <div className="MaiorFaturamento-container">
         <ul className="lista">
-          {iten.map(item => (
+          {itens.map(item => (
             <li key={item.item_id} className="MaiorFaturamento-item">
               <strong>{item.item_id}</strong>
               <span className="nome">{item.name}</span>
