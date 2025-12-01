@@ -16,7 +16,7 @@ export default function Adm() {
           />
 
           <Button 
-            texto = "Cancelar Item"
+            texto = "Excluir Item"
             onClick={() => navigate("/Adm/DItem")}
           />
 
