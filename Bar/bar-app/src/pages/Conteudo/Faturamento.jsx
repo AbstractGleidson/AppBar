@@ -19,6 +19,8 @@ export default function Cliente() {
   const endData = formatarData(end);
 
   useEffect(() => {
+
+    alert(startData)
     async function carregarDados() {
       try {
         const response = await fetch(
@@ -45,7 +47,7 @@ export default function Cliente() {
   }, []);
 
   if (faturas.length === 0) {
-    return <h2>Carregando...</h2>;
+    return <div><h2>Carregando...</h2></div>;
   }
 
   return (
@@ -58,6 +60,7 @@ export default function Cliente() {
         <h3 className="item4">Data</h3>
         <h3 className="item5">CPF Cliente</h3>
       </div>
+
 
       <div className="Faturamento-container">
         <ul className="lista">

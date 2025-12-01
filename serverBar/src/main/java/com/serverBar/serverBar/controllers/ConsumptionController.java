@@ -80,6 +80,9 @@ public class ConsumptionController {
             if (item == null)
                 return ResponseEntity.status(404).body("Item não existe!");
 
+            if(!account.isOpen())
+                return ResponseEntity.status(404).body("Conta fechada!");
+
             if(!item.isAvailable())
                 return ResponseEntity.status(404).body("O pedido não está disponivel!");
 
@@ -147,9 +150,20 @@ public class ConsumptionController {
     }
 
     @DeleteMapping("/consumptions/{id}") // Delete consumption by id
-    public void deleteConsumption(@PathVariable int id)
+    public ResponseEntity<?> deleteConsumption(@PathVariable int id)
     {
-        consumptionDAO.deleteById(id);
+        try{
+            Consumption consumption = consumptionDAO.findById(id).orElse(null);
+
+            if(consumption == null)
+                return ResponseEntity.status(404).body("Consumo não existe!");
+
+            consumptionDAO.deleteById(id);
+            return ResponseEntity.ok("Item deletado");
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @GetMapping("/consumption/interval")

@@ -29,11 +29,10 @@ export default function Cliente() {
     return <h2>Carregando...</h2>;
   }
 
-  const accountNumber = dadosCliente.consumptions[0].account.id;
 
   return (
     <div className="Cliente-page">
-      <h2 className="Cliente-titulo"> Número da mesa {accountNumber} </h2>
+      <h2 className="Cliente-titulo"> Número da mesa {dadosCliente.accountId} </h2>
 
       <div className="cabecalho">
         <h3 className="item1"> Id </h3>

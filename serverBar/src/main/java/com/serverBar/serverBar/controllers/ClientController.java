@@ -91,56 +91,60 @@ public class ClientController {
     @GetMapping("/client/resume/{cpf}")
     public ResponseEntity<?> getResume(@PathVariable String cpf) throws IOException {
 
-        // tenta achar um conta aberta
-        Account account = openAccountService.getAccountOpen(cpf);
+        try {
+            // tenta achar um conta aberta
+            Account account = openAccountService.getAccountOpen(cpf);
 
-        // Procura a ultima conta que foi fechada
-        if(account == null)
+            // Procura a ultima conta que foi fechada
+            if (account == null) {
+                account = accountLastClosedService.accountLastClosed(cpf);
+                if (account == null)
+                    return ResponseEntity.status(500).body("Cliente não possui nenhuma conta!");
+            }
+
+
+            int accountId = account.getAccountId();
+            ClientResumeRequest clientResumeRequest = new ClientResumeRequest();
+
+
+            Item covert = itemDAO.findById(0).orElse(null);
+            double covertValue = 0;
+            if (covert != null)
+                covertValue = covert.getValue();
+
+            double consumptionValue = 0.0;
+            double accountValue = 0.0;
+            TipValuesRequest tips;
+            double tempValue;
+
+            if (account.isOpen()) {
+                tips = tipCalculationService.tipCalculation(accountId);
+                tempValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
+            } else {
+                tips = new TipValuesRequest();
+
+                tips.setTipFoodValue(account.getTipFood());
+                tips.setTipDrinkValue(account.getTipDrink());
+                tips.setTipFoodValue(account.getTipFood() + account.getTipDrink());
+                tempValue = account.getValue();
+            }
+            accountValue = tempValue - paymentFullAccountService.paymentFullAccountServe(accountId);
+
+            consumptionValue = accountValue - tips.getTipFullValue();
+
+            clientResumeRequest.setConsumptions(consumptionDAO.findByAccountId(accountId));
+            clientResumeRequest.setAccountValue(accountValue <= 0 ? 0 : accountValue);
+            clientResumeRequest.setCovert(covertValue);
+            clientResumeRequest.setTipFull(tips.getTipFullValue());
+            clientResumeRequest.setTipDrink(tips.getTipDrinkValue());
+            clientResumeRequest.setTipFood(tips.getTipFoodValue());
+            clientResumeRequest.setConsumptionsValue(consumptionValue);
+            clientResumeRequest.setAccountId(accountId);
+
+            return ResponseEntity.ok().body(clientResumeRequest);
+        }catch (Exception e)
         {
-            account = accountLastClosedService.accountLastClosed(cpf);
-            if(account == null)
-                return ResponseEntity.status(500).body("Cliente não possui nenhuma conta!");
+            return ResponseEntity.status(500).body("Erro: " + e);
         }
-
-
-        int accountId = account.getAccountId();
-        ClientResumeRequest clientResumeRequest = new ClientResumeRequest();
-
-
-        Item covert = itemDAO.findById(0).orElse(null);
-        double covertValue = 0;
-        if(covert != null)
-            covertValue = covert.getValue();
-
-        double consumptionValue = 0.0;
-        double accountValue = 0.0;
-        TipValuesRequest tips;
-        double tempValue;
-
-        if(account.isOpen()) {
-            tips = tipCalculationService.tipCalculation(accountId);
-            tempValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
-        }else
-        {
-            tips = new TipValuesRequest();
-
-            tips.setTipFoodValue(account.getTipFood());
-            tips.setTipDrinkValue(account.getTipDrink());
-            tips.setTipFoodValue(account.getTipFood() + account.getTipDrink());
-            tempValue = account.getValue();
-        }
-        accountValue = tempValue - paymentFullAccountService.paymentFullAccountServe(accountId);
-
-        consumptionValue = accountValue - tips.getTipFullValue();
-
-        clientResumeRequest.setConsumptions(consumptionDAO.findByAccountId(accountId));
-        clientResumeRequest.setAccountValue(accountValue <= 0 ? 0 : accountValue);
-        clientResumeRequest.setCovert(covertValue);
-        clientResumeRequest.setTipFull(tips.getTipFullValue());
-        clientResumeRequest.setTipDrink(tips.getTipDrinkValue());
-        clientResumeRequest.setTipFood(tips.getTipFoodValue());
-        clientResumeRequest.setConsumptionsValue(consumptionValue);
-
-        return ResponseEntity.ok().body(clientResumeRequest);
     }
 }

@@ -18,7 +18,7 @@ export default function Pedido() {
       return;
     }
 
-    if(!(/^[0-9]+$/.test(ids.trim()))) {
+    if(!(/^[0-9]+$/.test(id.trim()))) {
       alert("O campo de ID deve conter apenas números.")
       return;
     }
@@ -28,14 +28,9 @@ export default function Pedido() {
     }
 
     const response = await fetch(
-      `http://localhost:8080/consumption`, 
+      `http://localhost:8080/consumptions/${id}`, 
       {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(dados)
       }
     );
 

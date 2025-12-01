@@ -134,7 +134,7 @@ public class ItemController {
         }
     }
 
-    @DeleteMapping("/Item/{num_item}")
+    @PutMapping("/item/{num_item}")
     public ResponseEntity<?> deleteItem(@PathVariable int num_item) // Delete item by num_item
     {
         try {
@@ -145,6 +145,9 @@ public class ItemController {
 
             if(item == null)
                 return ResponseEntity.status(404).body("Item não existe!");
+
+            if(!item.isAvailable())
+                return ResponseEntity.status(404).body("Item já tá indisponivel");
 
             item.setAvailable(false);
             DAO.save(item);

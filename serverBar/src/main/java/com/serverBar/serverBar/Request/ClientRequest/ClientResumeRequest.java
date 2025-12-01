@@ -13,6 +13,7 @@ public class ClientResumeRequest {
     private double covert;
     private double tipDrink;
     private double tipFood;
+    private int accountId;
 
     public void setAccountValue(double accountValue) {
         this.accountValue = accountValue;
@@ -68,5 +69,13 @@ public class ClientResumeRequest {
 
     public void setTipFood(double tipFood) {
         this.tipFood = tipFood;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 }

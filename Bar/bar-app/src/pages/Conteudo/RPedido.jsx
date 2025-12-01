@@ -54,8 +54,8 @@ export default function Pedido() {
   }
 
   return (
-    <div className="Pedido-page">
-      <div className="Pedido-card">
+    <div className="RPedido-page">
+      <div className="RPedido-card">
 
         <Input
           type = "number"

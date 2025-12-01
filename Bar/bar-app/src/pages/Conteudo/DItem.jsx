@@ -14,15 +14,16 @@ export default function DItem() {
 
     if(id.trim() === "") {
       alert("O campo não pode estar vazio.")
+      return;
     }
     if(!(/^[0-9]+$/.test(id.trim()))) {
       alert("O campo deve possuir apenas números.")
       return;
     }
-    setId(id.trim()); //Exclui os espaços do string Id
+     //Exclui os espaços do string Id
     const response = await fetch(
-      `http://localhost:8080/Item/${id}`, {
-      method: "DELETE",
+      `http://localhost:8080/item/${id}`, {
+      method: "PUT",
     });
 
     if(!response.ok)
@@ -46,7 +47,7 @@ export default function DItem() {
 
         <Button
           texto = "Deletar"
-          onClick={() => fechamento()}
+          onClick={() => deletar()}
         />
       </div>
     </div>
