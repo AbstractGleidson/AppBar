@@ -177,25 +177,14 @@ public class ConsumptionController {
         try {
 
             // Formatos possiveis
-            DateTimeFormatter formatBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            DateTimeFormatter formatUS = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             LocalDate start;
             LocalDate end;
 
-            // Tenta achar um dos tipos de formato de data Us ou BR
-            try {
-                start = LocalDate.parse(startDate, formatBR);
-                end = LocalDate.parse(endDate, formatBR);
-            } catch (Exception e1) {
-                // Tenta um se nao der tenta outro
-                try {
-                    start = LocalDate.parse(startDate, formatUS);
-                    end = LocalDate.parse(endDate, formatUS);
-                } catch (Exception e2) {
-                    return ResponseEntity.badRequest().body("Erro: formato de data inválido. Use dd/MM/yyyy ou MM/dd/yyyy.");
-                }
-            }
+            start = LocalDate.parse(startDate, format);
+            end = LocalDate.parse(endDate, format);
+
 
             // Se a data inicial for maior que a final, inverte
             if (start.isAfter(end)) {
@@ -207,24 +196,22 @@ public class ConsumptionController {
             LocalDateTime startDateTime = start.atStartOfDay();
             LocalDateTime endDateTime = end.atTime(23, 59, 59);
 
-            DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
             ArrayList<Consumption> consumptions = consumptionIntervalCalculationService.getConsumptionInterval(
-                    startDateTime.format(formatterOut),
-                    endDateTime.format(formatterOut)
+                    startDateTime.format(format),
+                    endDateTime.format(format)
             );
             ArrayList<ConsumptionIntervalRequest> request = new ArrayList<>();
 
             PayRevenueRequest payRequest = payIntervalCalculationService.intervalPayCalculation(
-                    startDateTime.format(formatterOut),
-                    endDateTime.format(formatterOut)
+                    startDateTime.format(format),
+                    endDateTime.format(format)
             );
 
             // Montar resposta
             for (Consumption c : consumptions) {
                 ConsumptionIntervalRequest r = new ConsumptionIntervalRequest();
 
-                r.setDate(c.getDate().format(formatBR));
+                r.setDate(c.getDate().format(format));
                 r.setQuantity(c.getQuantity());
                 r.setNameItem(c.getItem().getName());
                 r.setClient_cpf(c.getAccount().getClient().getCpf());

@@ -15,7 +15,7 @@ public class Consumption {
     @Column(name = "quantidade", nullable = false) // Relates this attribute to the database column
     private int quantity;
 
-    @Column(name = "data", nullable = true)
+    @Column(name = "data", nullable = true, insertable = false, updatable = false)
     private LocalDateTime date;
 
     @OneToOne // Define a relationship one to one

@@ -32,13 +32,13 @@ public class TipCalculationService {
             Item item = consumption.getItem();
             switch (consumption.getItem().getType())
             {
-                case 2:
+                case 1:
                     tipFull += (tips.getTipPercentDrink() / 100) * (consumption.getQuantity() * item.getValue());
-                    tipDrink += (tips.getTipPercentDrink() / 100) * (consumption.getQuantity() * item.getValue());
+                    tipFood += (tips.getTipPercentDrink() / 100) * (consumption.getQuantity() * item.getValue());
                     break;
-                case 3:
+                case 2:
                     tipFull += (tips.getTipPercentFood() / 100) * (consumption.getQuantity() * item.getValue());
-                    tipFood += (tips.getTipPercentFood() / 100) * (consumption.getQuantity() * item.getValue());
+                    tipDrink += (tips.getTipPercentFood() / 100) * (consumption.getQuantity() * item.getValue());
                     break;
                 default:
                     break;

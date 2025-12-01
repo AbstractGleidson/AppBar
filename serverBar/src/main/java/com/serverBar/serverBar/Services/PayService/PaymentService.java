@@ -29,7 +29,10 @@ public class PaymentService {
         if (account == null)
             return false;
 
-        double valueAccount =  accountCalculationValueService.accountCalculationConsumptions(accountId);
+
+        double valueAccount = account.getValue();
+
+
         double payAccount = paymentFullAccountService.paymentFullAccountServe(accountId);
 
         return (valueAccount - payAccount >= 0);

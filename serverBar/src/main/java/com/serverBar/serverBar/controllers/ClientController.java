@@ -117,6 +117,8 @@ public class ClientController {
             TipValuesRequest tips;
             double tempValue;
 
+            System.out.println(tipCalculationService.tipCalculation(accountId).getTipFoodValue());
+
             if (account.isOpen()) {
                 tips = tipCalculationService.tipCalculation(accountId);
                 tempValue = accountCalculationConsumptionsService.accountCalculationConsumptions(accountId);
