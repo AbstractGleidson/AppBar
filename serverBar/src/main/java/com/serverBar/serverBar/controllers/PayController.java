@@ -62,28 +62,34 @@ public class PayController {
 
     @PostMapping("/pay") // Save one new pay on database
     public ResponseEntity<?> postPay(@RequestBody PayPostRequest payRequest) throws IOException {
-        if(!paymentService.validatedPayment(payRequest.getConta_id(), payRequest.getValor()))
-            return ResponseEntity.status(500).body("Conta já foi pago");
 
-        // Check if account exists
-        Optional<Account> account  = accountDAO.findById(payRequest.getConta_id());
+        try {
+            if (!paymentService.validatedPayment(payRequest.getConta_id(), payRequest.getValor()))
+                return ResponseEntity.status(404).body("Conta já foi pago");
 
-        // Account not exists in database
-        if(account.isEmpty())
-            return ResponseEntity.status(404).body("Conta não encontrada");
+            // Check if account exists
+            Account account = accountDAO.findById(payRequest.getConta_id()).orElse(null);
 
-        // get account
-        Account newAccount = account.get();
+            // Account not exists in database
+            if (account == null)
+                return ResponseEntity.status(404).body("Conta não encontrada");
 
-        // Construct pay
-        Pay pay = new Pay();
-        pay.setId(0); // id is auto generated
-        pay.setAccount(newAccount);
-        pay.setAuthor(payRequest.getAutor());
-        pay.setValue(payRequest.getValor());
+            if(account.isOpen())
+                return ResponseEntity.status(404).body("Conta não está fechada!");
 
-        // Save pay and return server response
-        return ResponseEntity.status(200).body(payDAO.save(pay));
+            // Construct pay
+            Pay pay = new Pay();
+            pay.setId(0); // id is auto generated
+            pay.setAccount(account);
+            pay.setAuthor(payRequest.getAutor());
+            pay.setValue(payRequest.getValor());
+
+            // Save pay and return server response
+            return ResponseEntity.ok().body(payDAO.save(pay));
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @PutMapping("/pay")

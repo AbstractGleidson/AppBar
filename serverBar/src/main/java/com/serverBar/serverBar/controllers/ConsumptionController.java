@@ -67,30 +67,35 @@ public class ConsumptionController {
     @PostMapping("/consumption") // Save one new consumption
     public ResponseEntity<?> postConsumption(@RequestBody ConsumptionPostRequest consumptionRequest)
     {
-        // Check if the account exists
-        Optional<Account> account = accountDAO.findById(consumptionRequest.getConta_id());
-        // Check if the item exists
-        Optional<Item>  item = itemDAO.findById(consumptionRequest.getNum_item());
+        try {
+            // Check if the account exists
+            Account account = accountDAO.findById(consumptionRequest.getConta_id()).orElse(null);
+            // Check if the item exists
+            Item item = itemDAO.findById(consumptionRequest.getNum_item()).orElse(null);
 
-        // Account not exists
-        if(account.isEmpty())
-            return ResponseEntity.status(404).body("Conta não existe!");
-        // Item not exists
-        if(item.isEmpty())
-            return ResponseEntity.status(404).body("Item não existe!");
+            // Account not exists
+            if (account == null)
+                return ResponseEntity.status(404).body("Conta não existe!");
+            // Item not exists
+            if (item == null)
+                return ResponseEntity.status(404).body("Item não existe!");
 
-        Account newAccount = account.get(); // get account
-        Item newItem = item.get(); // get item
+            if(!item.isAvailable())
+                return ResponseEntity.status(404).body("O pedido não está disponivel!");
 
-        // Constructs consumption
-        Consumption consumption = new Consumption();
-        consumption.setId(0); // id is auto generated
-        consumption.setAccount(newAccount);
-        consumption.setItem(newItem);
-        consumption.setQuantity(consumptionRequest.getQuantidade());
+            // Constructs consumption
+            Consumption consumption = new Consumption();
+            consumption.setId(0); // id is auto generated
+            consumption.setAccount(account);
+            consumption.setItem(item);
+            consumption.setQuantity(consumptionRequest.getQuantidade());
 
-        // return new consumption and server response
-        return ResponseEntity.status(200).body(consumptionDAO.save(consumption));
+            // return new consumption and server response
+            return ResponseEntity.status(200).body(consumptionDAO.save(consumption));
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @PutMapping("/consumption")
@@ -154,9 +159,6 @@ public class ConsumptionController {
 
         try {
 
-            System.out.println(startDate);
-            System.out.println(endDate);
-
             // Formatos possiveis
             DateTimeFormatter formatBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             DateTimeFormatter formatUS = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -187,9 +189,6 @@ public class ConsumptionController {
 
             LocalDateTime startDateTime = start.atStartOfDay();
             LocalDateTime endDateTime = end.atTime(23, 59, 59);
-
-            System.out.println(startDateTime);
-            System.out.println(endDateTime);
 
             DateTimeFormatter formatterOut = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

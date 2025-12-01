@@ -170,12 +170,12 @@ public class AccountController {
     {
         try {
             if(!validatedAccountService.validateOpenAccount(request.getCpf_client()))
-                return ResponseEntity.status(500).body("O cliente já tem uma conta aberta!");
+                return ResponseEntity.status(404).body("O cliente já tem uma conta aberta!");
 
             Client client = clientDAO.findById(request.getCpf_client()).orElse(null);
 
             if (client == null)
-                return ResponseEntity.status(500).body("O cliente não existe no banco de dados!");
+                return ResponseEntity.status(404).body("O cliente não existe no banco de dados!");
 
             Account account = new Account();
 

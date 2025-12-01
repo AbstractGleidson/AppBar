@@ -6,6 +6,7 @@ import com.serverBar.serverBar.Request.ItemRequest.ItemMoreRevenueRequest;
 import com.serverBar.serverBar.Request.ItemRequest.ItemMoreSaleRequest;
 import com.serverBar.serverBar.Request.ItemRequest.ItemPostResquest;
 import com.serverBar.serverBar.Request.ItemRequest.ItemPutRequest;
+import com.serverBar.serverBar.Services.BarService.ValidationDataUpdateService;
 import com.serverBar.serverBar.models.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,8 @@ public class ItemController {
     private ItemInterface DAO; // Automatically generates DAOs methods
     @Autowired
     private ConsumptionInterface consumptionDAO;
+    @Autowired
+    private ValidationDataUpdateService validationDataUpdateService;
 
     @GetMapping("/cardapio")
     public ArrayList<Item> getItems() // Recover Cardapio on database
@@ -62,6 +65,9 @@ public class ItemController {
     public ResponseEntity<?> updateItem(@RequestBody ItemPutRequest request) // Updates a customer information
     {
         try {
+            if(validationDataUpdateService.validationDataUpdate())
+                return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
+
             if (request.getNumber_item() == 0)
                 return ResponseEntity.status(500).body("O ingresso não pode ser criado por este endpoint!");
 
@@ -103,14 +109,39 @@ public class ItemController {
     }
 
     @DeleteMapping("/cardapio")
-    public void deleteItems() // Delete Cardapio
+    public ResponseEntity<?> deleteItems() // Delete Cardapio
     {
-        DAO.deleteAll();
+        try {
+            if(validationDataUpdateService.validationDataUpdate())
+                return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
+
+            DAO.deleteAll();
+            return ResponseEntity.ok().body("Cardapio deletado com sucesso");
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @DeleteMapping("/Item/{num_item}")
-    public void deleteItem(@PathVariable int num_item) // Delete item by num_item
+    public ResponseEntity<?> deleteItem(@PathVariable int num_item) // Delete item by num_item
     {
-        DAO.deleteById(num_item);
+        try {
+            if(validationDataUpdateService.validationDataUpdate())
+                return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
+
+            Item item = DAO.findById(num_item).orElse(null);
+
+            if(item == null)
+                return ResponseEntity.status(404).body("Item não existe!");
+
+            item.setAvailable(false);
+            DAO.save(item);
+
+            return ResponseEntity.ok().body("Item deletado");
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 }

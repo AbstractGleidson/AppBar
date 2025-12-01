@@ -1,6 +1,7 @@
-package com.serverBar.serverBar.Services;
+package com.serverBar.serverBar.Services.BarService;
 
 import com.serverBar.serverBar.Request.BarResumeRequest;
+import com.serverBar.serverBar.Services.ItemResumeService;
 import com.serverBar.serverBar.Services.PayService.PayIntervalResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
