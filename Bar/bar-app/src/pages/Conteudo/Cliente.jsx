@@ -5,10 +5,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 export default function Cliente() {
   const navigate = useNavigate();
   const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const cpf = location.state?.cpf || params.get("cpf");
   
   const [dadosCliente, setDadosCliente] = useState(null);
-
-  const cpf = location.state?.cpf;
 
   async function getClienteDados() {
     const response = await fetch(`http://localhost:8080/client/resume/${cpf}`);

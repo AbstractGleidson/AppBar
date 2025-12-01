@@ -49,7 +49,7 @@ public class BarController {
         try {
             TipRequest tips = tipService.loadTipsPercents();
 
-            if (validationDataUpdateService.validationDataUpdate())
+            if (!validationDataUpdateService.validationDataUpdate())
                 return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
 
             if (request.getTipPercentDrink() != null)
@@ -95,6 +95,9 @@ public class BarController {
     public ResponseEntity<?> createdCovert(@PathVariable double valueCovert)
     {
         try {
+            if(!validationDataUpdateService.validationDataUpdate())
+                return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
+
             Item covert = itemDAO.findById(0).orElse(null);
 
             if (covert == null) {
@@ -120,7 +123,7 @@ public class BarController {
     @PutMapping("/bar/covert/{valueCovert}")
     public ResponseEntity<?> updateCovert(@PathVariable double valueCovert) {
         try {
-            if(validationDataUpdateService.validationDataUpdate())
+            if(!validationDataUpdateService.validationDataUpdate())
                 return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
 
             Item covert = itemDAO.findById(0).orElse(null);
@@ -141,5 +144,4 @@ public class BarController {
             return ResponseEntity.status(500).body("Erro: " + e);
         }
     }
-
 }

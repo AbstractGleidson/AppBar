@@ -30,10 +30,22 @@ public class ItemController {
     private ValidationDataUpdateService validationDataUpdateService;
 
     @GetMapping("/cardapio")
-    public ArrayList<Item> getItems() // Recover Cardapio on database
+    public ResponseEntity<?> getItems() // Recover Cardapio on database
     {
-        // List of items or empty list
-        return (ArrayList<Item>) DAO.findAll();
+        try{
+            ArrayList<Item> items = (ArrayList<Item>) DAO.findAll();
+
+            ArrayList<Item> tempItem = new ArrayList<>();
+
+            for(Item item: items)
+                if (item.getNumber_item() != 0)
+                    tempItem.add(item);
+
+            return ResponseEntity.ok(tempItem);
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(500).body("Erro: " + e);
+        }
     }
 
     @GetMapping("/item/{num_item}")
@@ -65,7 +77,7 @@ public class ItemController {
     public ResponseEntity<?> updateItem(@RequestBody ItemPutRequest request) // Updates a customer information
     {
         try {
-            if(validationDataUpdateService.validationDataUpdate())
+            if(!validationDataUpdateService.validationDataUpdate())
                 return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
 
             if (request.getNumber_item() == 0)
@@ -100,7 +112,6 @@ public class ItemController {
             if (item == null)
                 return ResponseEntity.status(404).body("Tentando criar um item com dados incompletos!");
 
-
             return ResponseEntity.ok(DAO.save(item)); // Return update item
         }catch (Exception e)
         {
@@ -112,7 +123,7 @@ public class ItemController {
     public ResponseEntity<?> deleteItems() // Delete Cardapio
     {
         try {
-            if(validationDataUpdateService.validationDataUpdate())
+            if(!validationDataUpdateService.validationDataUpdate())
                 return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
 
             DAO.deleteAll();
@@ -127,7 +138,7 @@ public class ItemController {
     public ResponseEntity<?> deleteItem(@PathVariable int num_item) // Delete item by num_item
     {
         try {
-            if(validationDataUpdateService.validationDataUpdate())
+            if(!validationDataUpdateService.validationDataUpdate())
                 return ResponseEntity.status(404).body("Regras de negocio nao podem ser alteradas enquanto tiver alguma mesa aberda");
 
             Item item = DAO.findById(num_item).orElse(null);

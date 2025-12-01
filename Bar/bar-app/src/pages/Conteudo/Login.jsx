@@ -88,15 +88,12 @@ export default function Login() {
 
         alert("Login Realizado com sucesso");
 
-         const link = `http://localhost:5173/Cliente/${senha}`;
+         const link = `http://localhost:5173/Cliente?cpf=${senha}`;
 
+        navigate(
+        {state: {cpf: senha}});
         setQrLink(link);
         setShowQR(true);//Imprime o QrCode
-        // navigate(
-        //   "/Cliente", 
-        //   {state: {cpf: senha}
-        //   }
-        // );
       }
     }
   }

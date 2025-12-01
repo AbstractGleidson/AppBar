@@ -21,7 +21,7 @@ export default function Edicao() {
       return;
     }
 
-    if(!(/^[0-9]+$/.test(id.trim())) || (valor.trim() !== "" && !(/^[0-9]+(,[0-9]{1,2})?$/.test(valor.trim()))) ) {
+    if(!(/^[0-9]+$/.test(id.trim())) || (valor.trim() !== "" && !(/^[0-9]+(.[0-9]{1,2})?$/.test(valor.trim())))) {
       alert("Os campos devem possuir dados válidos.");
       return;
     }
@@ -31,10 +31,7 @@ export default function Edicao() {
       return;
     }
 
-    const [tipoInt, setTipoInt] = (tipo === ""? null: tipo);
-    
-    if(tipoInt != null)
-      setTipoInt(tipoInt === "Comida"? 1 : 2);
+    const tipoInt = "" == tipo.trim()? null : ("comida" == tipo.trim().toLowerCase()? 1: 2);
 
     const dados = {
       number_item: id.trim(),
