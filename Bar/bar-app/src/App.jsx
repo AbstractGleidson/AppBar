@@ -21,6 +21,7 @@ import ItensVendidos from "./pages/Conteudo/ItensVendidos"
 import MaiorFaturamento from "./pages/Conteudo/MaiorFaturamento"
 import Faturamento from "./pages/Conteudo/Faturamento"
 import Periodo from "./pages/Conteudo/Periodo"
+import DItem from "./pages/Conteudo/DItem"
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
 
         <Route path="/Adm" element = {<Adm />} />
           <Route path="/Adm/Edicao" element = {<Edicao />} />
+          <Route path="/Adm/DItem" element = {<DItem/>} />
           <Route path="/Adm/Negocio" element = {<Negocio />} />
           <Route path="/Adm/Periodo" element = {<Periodo/>} />
           <Route path="/Adm/Periodo/Faturamento" element = {<Faturamento/>} />

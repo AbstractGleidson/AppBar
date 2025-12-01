@@ -92,11 +92,11 @@ export default function Login() {
 
         setQrLink(link);
         setShowQR(true);//Imprime o QrCode
-        navigate(
-          "/Cliente", 
-          {state: {cpf: senha}
-          }
-        );
+        // navigate(
+        //   "/Cliente", 
+        //   {state: {cpf: senha}
+        //   }
+        // );
       }
     }
   }
